@@ -1,5 +1,5 @@
-/* Задание номер 1.
-Процедура вставки задаваемого узла в trie-дерево и вывод дерева.
+/* Task 1.
+Insert node in trie-tree and display tree
 */
 #include <iostream>
 #include <cstring>
