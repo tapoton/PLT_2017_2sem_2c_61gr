@@ -46,7 +46,7 @@ Trie *trie_insert(Trie *root,char *key, char* value) //вставка в дерево
  }
  if (node->value != NULL)
    free(node->value);
-  node->value=strdup(value);
+ node->value=strdup(value);
  return root;
 } 
 
@@ -72,36 +72,34 @@ void trie_print(Trie *root, int level) //вывод на экран
 Trie* delete2(Trie *root,Trie *parent,int *found) //основное удаление 
 { 
  Trie *node;
-  for(Trie *cur=root,*prev=NULL;cur!=NULL;cur=cur->sibling) 
+ for(Trie *cur=root,*prev=NULL;cur!=NULL;cur=cur->sibling) 
+ {
+  node=cur;
+  if(node->child!=NULL) 
+   node=delete2(node->child,node,found); //рекурсия
+  if(node->value!=NULL) 
+   *found=!strcmp(node->value,"1"); //значения strcmp(s1,s2)=0,когда s1==s2
+  if(*found && node->child==NULL)  //полное удаление звена(как в обычном удалении)
   {
-   *found=0;
-   node=cur;
-   if(node->child!=NULL) 
-    node=delete2(node->child,node,found); //рекурсия
-   if(node->value!=NULL) 
-    *found=!strcmp(node->value,"1"); //значения strcmp(s1,s2)=0,когда s1==s2
-   if(*found && node->child==NULL)  //полное удаление звена
+   if(prev!=NULL) 
+    prev->sibling=node->sibling;
+   else 
    {
-    if(prev!=NULL) 
-      {
-       prev->sibling = node->sibling;
-      }
-    else 
-    {
-     if (parent!= NULL)
-      parent->child=node->sibling;
-     else
-      root=node->sibling;
-    }
+    if (parent!= NULL)
+     parent->child=node->sibling;
+    else
+     root=node->sibling;
+   }
    free(node->value);
    free(node);
-   }
-  else if(*found && node->child!=NULL) //удаление только номера(если четное находится внутри нечетного)
-  {
-    node->value=NULL;	
-    free(node->value);
   }
-  else prev=node; 
+  else if(*found && node->child!=NULL && node->value!=NULL) //удаление только номера(если четное находится внутри нечетного)
+  {
+   node->value=NULL;	
+   free(node->value);
+   *found=0;
+  }
+  if(*found==0) prev=node; 
  }
  if(parent!=NULL) return parent;
   else return root;		 
@@ -118,7 +116,7 @@ int main()
  setlocale(LC_ALL,"Russian"); 
  Trie *root=trie_create();
  cout<<"Создание дерева"<<endl;
- cout<<"Вводите слова(латинские) до знака='.'"<<endl;
+ cout<<"Вводите слова(латинские) до cлова='.'"<<endl;
  char sl[20];
  cin>>sl;
  root=NULL;
@@ -132,6 +130,8 @@ int main()
  trie_print(root, 0);
  cout<<"\nДерево без слов четной длины:"<<endl;
  root=delete1(root);
- trie_print(root, 0);
+ if(root==NULL) cout<<"Дерево пусто"<<endl;
+ else
+  trie_print(root, 0);
  return 0;		
 }
