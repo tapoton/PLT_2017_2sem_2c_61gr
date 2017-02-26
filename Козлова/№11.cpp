@@ -5,7 +5,7 @@ using namespace std;
  
 struct Trie  //структура
 {
- bool value;
+ bool*value;
  char ch;
  Trie *sibling;
  Trie *child;
@@ -15,13 +15,13 @@ Trie* trie_create()  //создание пустой узла
 {
  Trie *node=new Trie;	
  node->ch='\0';
- node->value=false;
+ node->value=NULL;
  node->sibling=NULL;
  node->child=NULL;
  return node;
 }
 
-Trie *trie_insert(Trie *root,char *key, bool value) //вставка в дерево
+Trie *trie_insert(Trie *root,char *key, bool* value) //вставка в дерево
 {
  Trie *node, *parent, *list;
  parent = NULL;
@@ -35,19 +35,16 @@ Trie *trie_insert(Trie *root,char *key, bool value) //вставка в дерево
    node = trie_create();
    node->ch = *key;
    node->sibling = list;
-   node->value=value;
    if (parent != NULL) parent->child = node;
    else 
      root = node;
    list = NULL;
   } 
   else 
-   {
-    if(!value) node->value=value;
     list = node->child;
-   }
   parent = node;
  }
+ node->value=value;
  return root;
 } 
 
@@ -67,15 +64,17 @@ void trie_print(Trie *root, int level) //вывод на экран
 
 
 
-Trie* delete2(Trie *root,Trie *parent) //основное удаление 
+Trie* delete2(Trie *root,Trie *parent,int *found) //основное удаление 
 { 
  Trie *node;
  for(Trie *cur=root,*prev=NULL;cur!=NULL;cur=cur->sibling) 
  {
   node=cur;
   if(node->child!=NULL) 
-   node=delete2(node->child,node); //рекурсия 
-  if(node->value==true && node->child==NULL)  //полное удаление звена(как в обычном удалении)
+   node=delete2(node->child,node,found); //рекурсия
+  if(node->value!=NULL) 
+    *found=*node->value==true; 
+  if(*found && node->child==NULL)  //полное удаление звена(как в обычном удалении)
   {
    if(prev!=NULL) 
     prev->sibling=node->sibling;
@@ -86,7 +85,12 @@ Trie* delete2(Trie *root,Trie *parent) //основное удаление
     else
      root=node->sibling;
    }
-   free(node);
+   delete(node);
+  }
+  else if(*found && node->child!=NULL && node->value!=NULL) //удаление только номера(если четное находится внутри нечетного)
+  {
+    node->value=NULL;	
+    *found=0;
   }
   if(node->value==false) prev=node; 
  }
@@ -96,7 +100,8 @@ Trie* delete2(Trie *root,Trie *parent) //основное удаление
  	
  Trie *delete1(Trie *root) //вспомогательная функция удаления
 {
- return delete2(root,NULL);
+ int found;
+ return delete2(root,NULL,&found);
 }
 
 int main()
@@ -108,10 +113,11 @@ int main()
  char sl[20];
  cin>>sl;
  root=NULL;
+ bool nechet=false,chet=true;
  while(sl[0]!='.')	
  {
-  if(strlen(sl)%2==0) root=trie_insert(root,sl,true); //вставка значение "1" для слова четной длины 
-   else root=trie_insert(root,sl, false); //вставка значение "0" для слова нечетной длины 
+  if(strlen(sl)%2==0) root=trie_insert(root,sl,&chet); //вставка значение "1" для слова четной длины 
+   else root=trie_insert(root,sl, &nechet); //вставка значение "0" для слова нечетной длины 
   cin>>sl;
  }
  cout<<"\nНачальное дерево:"<<endl;
