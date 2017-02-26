@@ -20,6 +20,7 @@ struct trie {
 	struct trie *sibling; //sibling node
 	struct trie *child; //first child node
 };
+trie *mainRoot;
 
 struct trie *trie_create(); //create empty node in Tree
 char *trie_lookup(struct trie *root, char *key); //lookup word  in tree
@@ -29,13 +30,13 @@ struct trie *trie_delete_dfs(struct trie *root, struct trie *parent, char *key, 
 void trie_print(struct trie *root, int level); //print Trie-tree
 
 //My task
-void del_substring(struct trie *root, char *word); //run across all structure
-void chek_node(struct trie *root, char *key); //check the current node, if it starts from substring go to free_trie
+void del_substring(struct trie *root, char *word, trie *last); //run across all structure
+bool chek_node(struct trie *root, char *key); //check the current node, if it starts from substring go to free_trie
 void free_trie(struct trie *root); //delete all the tree from given root
 
 int main()
 {
-    struct trie *root = NULL;
+    mainRoot = NULL;
 	
 	cout<<"Commands:"<<endl
 	<<"0 - Stop the program"<<endl
@@ -56,7 +57,7 @@ int main()
 				char word[80], key[80];
 				cout<<"Enter a word and key: ";
 				cin>>word>>key;
-				root = trie_insert(root, (char*)word, (char*)key);
+				mainRoot = trie_insert(mainRoot, (char*)word, (char*)key);
 				break;
 			}
 			case 2:{
@@ -64,7 +65,7 @@ int main()
 				cout<<"Enter a word: ";
 				cin>>word;
 				cout << "Lookup '"<<word<<"' : ";
-				ans=trie_lookup(root,word);
+				ans=trie_lookup(mainRoot,word);
 				if(!ans) cout<<"not found"<<endl;
 				else cout<<ans<<endl;
 				break;
@@ -73,14 +74,15 @@ int main()
 				char word[80];
 				cout<<"Enter a word: ";
 				cin>>word;
-				root=trie_delete(root, (char*)word);
+				mainRoot=trie_delete(mainRoot, (char*)word);
 				break;
 			}
 			case 4:{
 				char word[80];
 				cout<<"Enter a substring: ";
 				cin>>word;
-				del_substring(root, (char*)word);
+				trie*last=NULL;
+				del_substring(mainRoot, (char*)word, last);
 				break;
 			}
 			case 5:{
@@ -91,7 +93,7 @@ int main()
 	            <<"3 - Delete word"<<endl
 	            <<"4 - Delete all words containing a given substring //my task"<<endl
 	            <<"5 - Print tree"<<endl;
-				trie_print(root,0);
+				trie_print(mainRoot,0);
 				break;
 			}
 		}
@@ -193,31 +195,33 @@ void trie_print(struct trie *root, int level)
 	}
 }
 
-void del_substring(struct trie *root, char *word) 
+void del_substring(struct trie *root, char *word, trie *last) 
 {
 	struct trie *node=root;
 	while(node)
 	{
+		if(node->value) last=node;
 		if(node->child)
 		{
-			del_substring(node->child,word);
+			del_substring(node->child,word,last);
 		}
-		chek_node(root,word);
+		if(chek_node(root,word) && last) free_trie(last->child);
+		else if(chek_node(root,word) && !last) free_trie(mainRoot);
 		node=node->sibling;
 	}
 }
 
-void chek_node(struct trie *root, char *key) 
+bool chek_node(struct trie *root, char *key) 
 {
 	struct trie *node, *list = root;
 	for(; *key != '\0'; key++) 
 	{
 		for(node = list; node != NULL; node = node->sibling)
 		    if(node->ch == *key) break;
-		if(node == NULL) return;
+		if(node == NULL) return 0;
 		else list = node->child;
 	}
-	free_trie(node);
+	return 1;
 }
 
 void free_trie(struct trie *root)
