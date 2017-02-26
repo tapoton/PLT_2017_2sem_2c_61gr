@@ -1,11 +1,11 @@
 /*
-    Жарковский Никита 2 курс 61 группа
-    Задание №8: Из trie-дерева удалить все слова, которые содержат указанную подстроку
+    Zharkovskiy Nikita 2nd year 61 group
+    Lab 1 task 8: From trie-tree to remove all the words containing a given substring.
     
-    p.s. Реализовал основные функции Trie-дерева + 3 функции для выполнения задания:
-    1) Проход по всему дереву, каждый узел вызывает пункт 2
-    2) Проверка совпадает ли корень данного поддерева с заданным словом, если да, пункт 3
-    3) Удаление всего поддерева
+    p.s. Implemented basic functions of trie-tree and 3 functions to solve my problem:
+    1) Pass around the tree. Each tree node calls the function 2.
+    2) check whether the root of a subtree with the specified word. If Yes, proceed to step 3
+    3) Delete subtree
 */
 
 #include <iostream>
