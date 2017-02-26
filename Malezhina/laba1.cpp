@@ -9,7 +9,7 @@ using namespace std;
 
 struct trie 
 { 
-	char *value;
+	int value;
  	char ch; 
  	trie *sibling;    
  	trie *child; 
@@ -19,28 +19,27 @@ trie *trie_create()
 {
 	trie *node = new trie;
 	node->ch = '\0'; 
-	node->value = NULL; 
+	node->value = 0; 
 	node->sibling = NULL; 
 	node->child = NULL;
 	return node;        
 }
 
-void trie_lookup(trie *root, int val, int &numsg) //ГЇГ®Г¤Г±Г·ГҐГІ ГЄГ®Г«-ГўГ  Г±Г«Г®Гў, Г±Г®Г¤ГҐГ°Г¦Г Г№ГЁГµ Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­Г­Г®ГҐ ГЄГ®Г«-ГўГ® Г±Г®ГЈГ«Г Г±Г­Г»Гµ ГЁ ГўГ»ГўГ®Г¤ ГЁГµ Г­Г  ГЅГЄГ°Г Г­
+void trie_lookup(trie *root, int val, int numsg) //подсчет кол-ва слов, содержащих определенное кол-во согласных и вывод их на экран
 {
 	trie *node, *list;
 	for (node = root; node != NULL; node = node->sibling) 
 	{
-		if (node->value != NULL) 
+		if (node->value != 0) 
 		{  
-			int ivalue = atoi(node->value);
-			if (ivalue == val)
+			if (node->value == val)
 				numsg++;
 		}    
 		if (node->child != NULL) 
 			trie_lookup(node->child, val, numsg);	
 	}
 }
-struct trie *trie_insert(trie *root, char *key, char *value) // ГўГ±ГІГ ГўГЄГ  ГўГўГҐГ¤ГҐГ­Г®ГЈГ® Г±Г«Г®ГўГ , Гў ГЄГ Г·ГҐГ±ГІГўГҐ ГЄГ«ГѕГ·Г  - ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г±Г®ГЈГ«Г Г±Г­Г»Гµ ГЎГіГЄГў Гў Г±Г«Г®ГўГҐ 
+struct trie *trie_insert(trie *root, char *key, int value) // вставка введеного слова, в качестве ключа - количество согласных букв в слове 
 { 
 	trie *node, *parent, *list;
 	parent = NULL; 
@@ -69,31 +68,32 @@ struct trie *trie_insert(trie *root, char *key, char *value) // ГўГ±ГІГ ГўГЄГ  Г
 		} 
 		parent = node;
 	}  
-	if (node->value != NULL) 
-		free(node->value); 
-	node->value = strdup(value); 
+	node->value = value;
 	return root;
 }
 
-void trie_print(trie *root, int level) //ГўГ»ГўГ®Г¤ Г¤ГҐГ°ГҐГўГ 
-{
-	 trie *node; int i;
-	 for (node = root; node != NULL; node = node->sibling) 
-	 { 
-	 	for (i = 0; i < level; i++)
-		 	printf(" ");
-		if (node->value != NULL) 
-			 printf("%c (%s)\n",node->ch,node->value);
-		else 
-			 printf("%c \n",node->ch);  
-		if (node->child != NULL) 
-			trie_print(node->child, level + 1);
-	}
+void trie_print(trie *root, int level) //вывод дерева
+ {
+ 	trie *node;
+ 	int i;
+ 	for (node = root; node!=NULL;node = node->sibling)
+ 	{
+ 		for (i = 0;i < level;i++)
+ 			printf(" ");
+ 	
+ 		if (node->value != 0)
+			printf("%c (%d) \n" ,node->ch,  node->value);
+ 		else
+ 			printf("%c \n",node->ch);
+ 	
+ 		if (node->child != NULL)
+ 			trie_print(node->child, level+1);
+ 	}
 }
-int consonants(char *str) // ГЇГ®Г¤Г±Г·ГҐГІ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ  Г±Г®ГЈГ«Г Г±Г­Г»Гµ ГўГўГҐГ¤ГҐГ­Г­Г®Г¬ Г±Г«Г®ГўГҐ 
+int consonants(char *str) // подсчет количества согласных введенном слове 
 {
 	int sg=0;
-    char sog[]="ГЃГЎГ‚ГўГѓГЈГ„Г¤Г†Г¦Г‡Г§Г‰Г©ГЉГЄГ‹Г«ГЊГ¬ГЌГ­ГЏГЇГђГ°Г‘Г±Г’ГІГ”ГґГ•ГµГ–Г¶Г—Г·ГГёГ™Г№";
+    char sog[]="БбВвГгДдЖжЗзЙйКкЛлМмНнПпРрСсТтФфХхЦцЧчШшЩщ";
  
     for(int i=0; i < strlen(str); i++)
             for(int j=0; j < strlen(sog); j++)
@@ -113,8 +113,8 @@ int main()
 	int otv1, otv2;
 	do
 	{	
-			cout << " Г‚Г»ГЎГҐГ°ГЁГІГҐ Г¤ГҐГ©Г±ГІГўГЁГҐ:" << endl << "1. Г„Г®ГЎГ ГўГЁГІГј Г­Г®ГўГ®ГҐ Г±Г«Г®ГўГ®" << endl << "2. Г‚Г»ГўГҐГ±ГІГЁ Г¤ГҐГ°ГҐГўГ®"<< endl
-			<< "3. ГЋГЇГ°ГҐГ¤ГҐГ«ГЁГІГј ГЄГ®Г«-ГўГ® Г±Г«Г®Гў, ГЄГ®ГІГ®Г°Г»ГҐ Г±Г®Г¤ГҐГ°Г¦Г ГІ Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­Г­Г®ГҐ ГЄГ®Г«-ГўГ® Г±Г®ГЈГ«Г Г±Г­Г»Гµ"<< endl << "0. Г‚Г»ГµГ®Г¤"<< endl <<"=";
+			cout << " Выберите действие:" << endl << "1. Добавить новое слово" << endl << "2. Вывести дерево"<< endl
+			<< "3. Определить кол-во слов, которые содержат определенное кол-во согласных"<< endl << "0. Выход"<< endl <<"=";
 			cin >> otv1;
 			switch (otv1)
 			{
@@ -122,13 +122,11 @@ int main()
 					break;
 				case 1:  
 					{
-						cout<< "Г‚ГўГҐГ¤ГЁГІГҐ Г±Г«Г®ГўГ®:" << endl;
+						cout<< "Введите слово:" << endl;
 						char str[100];
  						cin >> str;
- 						char sog[10];
  						int kol = consonants(str);
- 						sprintf(sog, "%d", kol);
-						root = trie_insert(root, str, sog); 
+						root = trie_insert(root, str, kol); 
 						break;
 					}
 				case 2: 
@@ -140,16 +138,16 @@ int main()
 				case 3:
 					{
 						int ksg, numsg=0;
-						cout << "Г‚ГўГҐГ¤ГЁГІГҐ ГЄГ®Г«-ГўГ® Г±Г®ГЈГ«Г Г±Г­Г»Гµ:";
+						cout << "Введите кол-во согласных:";
 						cin >> ksg;
 						trie_lookup(root, ksg, numsg);
-						cout << "Г’Г ГЄГЁГµ Г±Г«Г®Гў:" << numsg << endl;
+						cout << "Таких слов:" << numsg << endl;
 						break;
 					}
 					
 				default:
 					{
-						cout << endl << "ГЋГёГЁГЎГЄГ " << endl; 
+						cout << endl << "Ошибка" << endl; 
 						break;
 					}
 			}
