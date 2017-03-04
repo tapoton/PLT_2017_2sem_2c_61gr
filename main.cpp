@@ -14,7 +14,7 @@ struct trie
 
 trie *trie_create()
 {
-	trie *node;
+	trie *node = new trie;
 
 	node->ch = '\0';
 	node->value = NULL;
@@ -27,12 +27,13 @@ trie *trie_create()
 trie *trie_insert(trie *root, char *x, char *value)
 {
 	trie *node, *parent, *list;
-	parent = NULL; 
+	parent = NULL;
+	node = root;
 	list = root;
 
 	for ( ; *x != '\0'; x++)
 	{
-		for (node = list; node != NULL; node = node->sibling)
+		for ( ; node != NULL; node = node->sibling)
 		{
 			if (node->key == *x)
 				break;
@@ -61,7 +62,7 @@ trie *trie_insert(trie *root, char *x, char *value)
 	if (node->value != NULL)
 		free (node->value);
 
-	node->value = strdup(value);
+	node->value = _strdup(value);
 
 	return root;
 }
@@ -129,11 +130,15 @@ void trie_print(trie *root, int level)
 
 int main()
 {
+	setlocale(LC_ALL, "RUSSIAN");
 	trie *root;
+
 	root = trie_insert(NULL, "bars", "60");
 	root = trie_insert(root, "baribal", "100");
 	root = trie_insert(root, "kit", "3000");
 	trie_print(root, 0);
+
+	system("PAUSE");
 	return 0;
 }
 
