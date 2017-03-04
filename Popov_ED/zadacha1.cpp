@@ -17,7 +17,6 @@ struct trie
  struct trie *trie_create() 
  { 
 	struct trie *node=new trie;
-	//node = malloc(sizeof(*node));
 	node->ch ='\0'; 
 
 	node->value = NULL; 
@@ -123,96 +122,80 @@ void trie_print(trie *root, int level)
 
 void search_count(trie *root)
 {
-	char name;
+	char name[50];
 	cout<<"\nInput srarching name: "; cin>>name;
-	printf("Lookup: %s\n", trie_lookup(root, &name));
+	cout<<"trie_lookup= "<<trie_lookup(root, name);
 }
 
-int menu()
+void menu()
 {
-	int m_change;
-	do
-	{
-		system("cls");
-    	cout<<"1-input the count\n";
+    	cout<<"\n1-input the count\n";
     	cout<<"2-search the count\n";
     	cout<<"3-delete the count\n";
     	cout<<"4-to change the count\n";
     	cout<<"5-to print on the screen\n";
     	cout<<"0-exit\n";	
-    	cin>>m_change;
-	}while(m_change>5);
-    return m_change;
 }
 
-void add_count(trie *root)
+trie* add_count(trie *root)
 {
-	bool p;
-	char name, value;
+	bool p=true;
+	char name[50], value[50];
+	
+	cout<<"Input the name: "; cin>>name;
+	cout<<"\nInput the value: "; cin>>value;
+	root = trie_insert(NULL, name, value);
 	cout<<"Add the value 1-yes 0-no \n"; cin>>p;
-	if (p) 
-	{
-		cout<<"Input the name: "; cin>>name;
-		cout<<"\nInput the value: "; cin>>value;
-		root = trie_insert(NULL, &name, &value);
-	}
 	while(p)
 	{
+		
 		cout<<"Input the name: "; cin>>name;
 		cout<<"\nInput the value: "; cin>>value;		
-		root = trie_insert(root, &name, &value);		
-	}	
+		root = trie_insert(root, name, value);
+		cout<<"Add the value 1-yes 0-no \n"; cin>>p;			
+	}
+	return	root;
 }
 
-void del_count(trie *root)
+trie *del_count(trie *root)
 {
-	char name;
+	char name[50];
 	cout<<"\nInput deleted name: "; cin>>name;
-	root = trie_delete(root, &name); 
-}
-
-trie *change1(struct trie *root, char *key) 
- { 
-	struct trie *node, *list;
-	for (list = root; *key != '\0'; key++) 
-	{ 
-	 	for (node = list; node != NULL; node = node->sibling) 
-	 	{ 
-	   		if (node->ch == *key) break; 
-	 	} 
-	 if (node != NULL) list = node->child; 
-	 else return NULL; 
-	} /* Check: Node must be a leaf node! */ 
- return node;
+	root = trie_delete(root, name); 
+	return root;
 }
 
 
-void change_count(trie *root)
+trie *change_count(trie *root)
 {
-	char cout1,cout2;
-	cout<<"Input serching name"; 
+	char cout1[50],cout2[50];
+	cout<<"Input serching name: "; 
 	cin>>cout1;
-	cout<<"Input the new value"; 
+	cout<<"Input the new value:"; 
 	cin>>cout2;
-	change1(root, &cout1)->ch=cout2;
+	root=trie_delete(root,cout1);
+	root=trie_insert(root,cout1,cout2);
+	return root;
 }
-
 
 int main() 
 	{ 
 	struct trie *root=NULL;
-	switch(menu())
+	int h;
+	do
 	{
-		case 1: add_count(root);
-		case 2: search_count(root);
-		case 3: del_count(root);
-		case 4: 
-		case 5:	trie_print(root, 0);
-		default:;
+	menu();
+	cin>>h;
+	switch(h)
+	{
+		case 1: root=add_count(root); break;
+		case 2: search_count(root); break;
+		case 3: root=del_count(root); break;
+		case 4: root=change_count(root); break;
+		case 5:	trie_print(root, 0); break;
+		default: h=0; break;
 	};
-    
-	
-	
+	}while (h!=0);
 
 	return 0;
 	}
