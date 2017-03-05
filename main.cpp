@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cstdlib>
+#include <cstring>
 
 using namespace std;
 
@@ -33,10 +33,9 @@ trie *trie_insert(trie *root, char *key, char *value)
 	for (key; *key != '\0'; key++)
 	{
 		for (node; node != NULL; node = node->sibling)
-		{
 			if (node->key == *key)
 				break;
-		}
+		
 	
 	
 	        if (node == NULL)
@@ -72,7 +71,7 @@ trie *trie_delete1(trie *root, trie *parent, char *key, bool *found)
 	if (root == NULL || *key == '\0')
 		return root;
 
-	for (node = root, node != NULL; node = node->sibling)
+	for (node = root; node != NULL; node = node->sibling)
 	{
 		if (node->key == *key)
 			break;
@@ -117,13 +116,13 @@ void trie_print(trie *root, int level)
 	for (node = root; node != NULL; node = node->sibling)
 	{
 		for (i = 0; i < level; i++)
-			cout << ' ';
+			printf("  ");
 
-		if (node->value == NULL)
-			cout << '\n' << node->key << ' ' << node->value;
+		if (node->value != NULL)
+			printf("%c (%s)\n", node->key, node->value);
 				
 		else
-			cout << '\n' << node->key;
+			printf("%c \n", node->key);
 
 		if (node->child != NULL)
 			trie_print(node->child, level+1);
@@ -141,10 +140,13 @@ int main()
 	root = trie_insert(root, "baribal", "100");
 	root = trie_insert(root, "whale", "3000");
 	root = trie_insert(root, "lion", "500");
+	root = trie_insert(root, "lizard", "730");
 	trie_print(root, 0);
 
 	cout << endl << endl;
-	cout << "Дерево, с удаленным ключом "bars": \n";
+	cout << "Дерево, с удаленным ключом: \n";
+	root = trie_delete(root, "lion");
+	trie_print(root, 0);
 	cout << endl << endl;
 
 	system("PAUSE");
