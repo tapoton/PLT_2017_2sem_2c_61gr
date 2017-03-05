@@ -1,6 +1,3 @@
-/* Task 1.
-Insert node in trie-tree and display tree
-*/
 #include <iostream>
 #include <cstring>
 using namespace std;
