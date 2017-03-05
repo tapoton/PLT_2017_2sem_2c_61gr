@@ -18,7 +18,7 @@ struct trie
 trie *createNode();
 trie *insertNode(trie *root, char *key, char *value);
 void printTrie(trie *root, int lvl);
-void findWords(trie *root, char *word);
+void findWords(trie *root, char *key);
 void printValues(trie *list);
 
 int main()
@@ -42,13 +42,10 @@ int main()
 			char word[64];
 			cin >> word;
 			char value[64];
+			char key[64];
 			strcpy_s(value, word);
-			for (int i = 0, l = strlen(word); i < l / 2; i++) {
-				char c = word[i];
-				word[i] = word[l - i - 1];
-				word[l - i - 1] = c;
-			}
-			root = insertNode(root, word, value);
+			strcpy_s(key, word);
+			root = insertNode(root, key, value);
 			break;
 		}
 		case 2: {
@@ -60,7 +57,9 @@ int main()
 			cout << "¬ведите окончание:";
 			char word[64];
 			cin >> word;
-			findWords(root, word);
+			char key[64];
+			strcpy_s(key, word);
+			findWords(root, key);
 			break;
 		}
 		default: {
@@ -82,20 +81,25 @@ trie *createNode() {
 	return node;
 }
 
-trie *insertNode(trie *root, char *word, char *value) {
+trie *insertNode(trie *root, char *key, char *value) {
+	for (int i = 0, l = strlen(key); i < l / 2; i++) {
+		char c = key[i];
+		key[i] = key[l - i - 1];
+		key[l - i - 1] = c;
+	}
 	trie *node = NULL, *parent, *list;
 	parent = NULL;
 	list = root;
 
-	for (; *word != '\0'; word++) {
+	for (; *key != '\0'; key++) {
 		for (node = list; node != NULL; node = node->sibling) {
-			if (node->key == *word)
+			if (node->key == *key)
 				break;
 		}
 			
 		if (node == NULL) {
 			node = createNode();
-			node->key = *word;
+			node->key = *key;
 			node->sibling = list;
 			if (parent != NULL)
 				parent->child = node;
@@ -131,18 +135,18 @@ void printTrie(trie *root, int lvl) {
 	cout << endl;
 }
 
-void findWords(trie *root, char *word) {
+void findWords(trie *root, char *key) {
 	trie *node = NULL, *list = root, *parent = NULL;
 
-	for (int i = 0, l = strlen(word); i < l / 2; i++) {
-		char c = word[i];
-		word[i] = word[l - i - 1];
-		word[l - i - 1] = c;
+	for (int i = 0, l = strlen(key); i < l / 2; i++) {
+		char c = key[i];
+		key[i] = key[l - i - 1];
+		key[l - i - 1] = c;
 	}
 
-	while (*word != '\0') {
+	while (*key != '\0') {
 		for (node = list; node != NULL; node = node->sibling)
-			if (node->key == *word)
+			if (node->key == *key)
 				break;
 
 		if (node == NULL) {
@@ -151,7 +155,7 @@ void findWords(trie *root, char *word) {
 		}
 		parent = list;
 		list = node->child;
-		word++;
+		key++;
 	}
 
 	if (parent->value != NULL)
