@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include <cstdlib>
 
 using namespace std;
@@ -16,7 +15,7 @@ trie *trie_create()
 {
 	trie *node = new trie;
 
-	node->ch = '\0';
+	node->key = NULL;
 	node->value = NULL;
 	node->sibling = NULL;
 	node->child = NULL;
@@ -24,60 +23,58 @@ trie *trie_create()
 	return node;
 }
 
-trie *trie_insert(trie *root, char *x, char *value)
+trie *trie_insert(trie *root, char *key, char *value)
 {
 	trie *node, *parent, *list;
 	parent = NULL;
 	node = root;
 	list = root;
 
-	for ( ; *x != '\0'; x++)
+	for (key; *key != '\0'; key++)
 	{
-		for ( ; node != NULL; node = node->sibling)
+		for (node; node != NULL; node = node->sibling)
 		{
-			if (node->key == *x)
+			if (node->key == *key)
 				break;
 		}
-	}
 	
-	if (node == NULL)
-	{
-		node = trie_create();
-		node->key = *x;
-		node->sibling = list;
+	
+	        if (node == NULL)
+        	{
+	        	node = trie_create();
+		        node->key = *key;
+		        node->sibling = list;
 
-		if (parent != NULL)
-			parent->child = node;
-		else
-			root = node;
-		list = NULL;
-	}
+		        if (parent != NULL)
+			        parent->child = node;
+		        else
+			        root = node;
 
-	else
-	{
-		list = node->child;
-	        parent = node;
-	}
+		        list = NULL;
+	        }
 
-	if (node->value != NULL)
-		free (node->value);
+	        else
+		        list = node->child;
 
+                parent = node;
+	
+        }
 	node->value = _strdup(value);
 
 	return root;
 }
 
-trie *trie_delete1(trie *root, trie *parent, char *x, int *found)
+trie *trie_delete1(trie *root, trie *parent, char *key, bool *found)
 {
 	trie *node, *prev = NULL;
-	*found = (*x == '\0' && root == NULL)?1:0;
+	*found = (*key == '\0' && root == NULL) ? true : false;
 
-	if (root == NULL || *x == '\0')
+	if (root == NULL || *key == '\0')
 		return root;
 
 	for (node = root, node != NULL; node = node->sibling)
 	{
-		if (node->key == *x)
+		if (node->key == *key)
 			break;
 		prev = node;
 	}
@@ -85,7 +82,9 @@ trie *trie_delete1(trie *root, trie *parent, char *x, int *found)
 	if (node == NULL)
 		return root;
 
-	if (*found > 0 && node->child == NULL)
+	trie_delete1(node->child, node, key + 1, found);
+
+	if (*found && node->child == NULL)
 	{
 		if (prev != NULL)
 			prev->sibling = node->sibling;
@@ -97,17 +96,17 @@ trie *trie_delete1(trie *root, trie *parent, char *x, int *found)
 				root = node->sibling;
 		}
 
-		free (node->value);
-		free (node);
+		delete node->value;
+		node = NULL;
 	}
 
 	return root;
 }
 
-trie *trie_delete(trie *root, char *x)
+trie *trie_delete(trie *root, char *key)
 {
-	int found;
-	return trie_delete1(root, NULL, x, &found);
+	bool found;
+	return trie_delete1(root, NULL, key, &found);
 }
 
 void trie_print(trie *root, int level)
@@ -119,10 +118,13 @@ void trie_print(trie *root, int level)
 	{
 		for (i = 0; i < level; i++)
 			cout << ' ';
+
 		if (node->value == NULL)
 			cout << '\n' << node->key << ' ' << node->value;
+				
 		else
 			cout << '\n' << node->key;
+
 		if (node->child != NULL)
 			trie_print(node->child, level+1);
 	}
@@ -131,12 +133,19 @@ void trie_print(trie *root, int level)
 int main()
 {
 	setlocale(LC_ALL, "RUSSIAN");
-	trie *root;
+	trie *root = NULL;
 
-	root = trie_insert(NULL, "bars", "60");
+	cout << "Исходное дерево: \n";
+
+	root = trie_insert(root, "bars", "60");
 	root = trie_insert(root, "baribal", "100");
-	root = trie_insert(root, "kit", "3000");
+	root = trie_insert(root, "whale", "3000");
+	root = trie_insert(root, "lion", "500");
 	trie_print(root, 0);
+
+	cout << endl << endl;
+	cout << "Дерево, с удаленным ключом "bars": \n";
+	cout << endl << endl;
 
 	system("PAUSE");
 	return 0;
