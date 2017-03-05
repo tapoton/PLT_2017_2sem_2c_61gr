@@ -23,46 +23,6 @@ trie *trie_create()
 	return node;
 }
 
-trie *trie_insert(trie *root, char *key, char *value)
-{
-	trie *node, *parent, *list;
-	parent = NULL;
-	node = root;
-	list = root;
-
-	for (key; *key != '\0'; key++)
-	{
-		for (node; node != NULL; node = node->sibling)
-			if (node->key == *key)
-				break;
-		
-	
-	
-	        if (node == NULL)
-        	{
-	        	node = trie_create();
-		        node->key = *key;
-		        node->sibling = list;
-
-		        if (parent != NULL)
-			        parent->child = node;
-		        else
-			        root = node;
-
-		        list = NULL;
-	        }
-
-	        else
-		        list = node->child;
-
-                parent = node;
-	
-        }
-	node->value = _strdup(value);
-
-	return root;
-}
-
 trie *trie_delete1(trie *root, trie *parent, char *key, bool *found)
 {
 	trie *node, *prev = NULL;
@@ -108,24 +68,57 @@ trie *trie_delete(trie *root, char *key)
 	return trie_delete1(root, NULL, key, &found);
 }
 
+trie *trie_insert(trie *root, char *key, char *value)
+{
+	trie *node = NULL;
+	trie *parent, *list;
+	parent = NULL;
+	list = root;
+
+	for (; *key != '\0'; key++)
+	{
+		for (node = list; node != NULL; node = node->sibling) //Get child
+			if (node->key == *key)
+				break;
+
+		if (node == NULL)
+		{
+			node = trie_create();
+			node->key = *key;           //Set child
+			node->sibling = list;
+			if (parent != NULL)
+				parent->child = node;
+			else
+				root = node;
+			list = NULL;
+		}
+		else
+		{
+			list = node->child;
+		}
+		parent = node;
+	}
+
+	node->value = _strdup(value);
+	return root;
+}
+
 void trie_print(trie *root, int level)
 {
 	trie *node;
 	int i;
-
 	for (node = root; node != NULL; node = node->sibling)
 	{
-		for (i = 0; i < level; i++)
-			printf("  ");
+		for (i = 0; i<level; i++)
+			printf(" ");
 
 		if (node->value != NULL)
 			printf("%c (%s)\n", node->key, node->value);
-				
 		else
 			printf("%c \n", node->key);
 
 		if (node->child != NULL)
-			trie_print(node->child, level+1);
+			trie_print(node->child, level + 1);
 	}
 }
 
