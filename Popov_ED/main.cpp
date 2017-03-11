@@ -1,5 +1,5 @@
-// Попова Евгения 2 курс 61 группа 
-//подсчитать в trie-дереве кол-во слов, оканчивающихся на согласную букву.
+// Popov Evgeny 2 course 61 group 
+//number words are counting in trie-tree, last consonant words.
 #include <cstdlib>
 #include <iostream>
 #include <cstring>
@@ -8,7 +8,7 @@ using namespace std;
 
 struct Trie
 {
-  int value;        // 0 если текущий символ и 1 если последний символ слова 
+  int value;        //  if current word 0 and if last simbol in word 1  
   char symbol;      
   Trie *sibling;   
   Trie *child;     
@@ -48,7 +48,7 @@ Trie * Insert ( Trie *root, char *key, int val)
         root = cur;
       list = NULL;
     } 
-    else                               // такой ключ найден, спускаемся на следующий уровень  
+    else                               // this key have search, down up on next level  
     {
       list = cur->child;
     }
@@ -62,10 +62,10 @@ Trie * Insert ( Trie *root, char *key, int val)
 Trie * Fill ()                          
 {
  int n;
- cout<<"Введите количество слов:\n";
+ cout<<"input the number word :\n";
  cin>>n;
  Trie *rt=NULL;
- cout<<"Вводите слова на английском:\n";
+ cout<<"Input the word in English :\n";
  for (int i=0;i<n;i++)
  {
   char *word =new char[25];
@@ -129,15 +129,13 @@ void trie_print(Trie *root, int level)
 
 
 int main()
-{
-  setlocale(LC_ALL,"Russian"); 
-  
+{ 
   Trie*root;
   root=Fill();
   cout<<endl;
   int m=0;
   Soglas(root,m);
   trie_print(root, 0);
-  cout<<"\nКоличество слов, оканчивающихся на согласную = "<<m<<endl;
+  cout<<"\nNumbers words have ended on consonant word = "<<m<<endl;
   return 0;
 }
