@@ -120,7 +120,7 @@ void trie_print(struct trie *root, int level)
 	for(node = root; node != NULL; node = node->sibling)
 	{
 		for(i = 0; i < level; i++) printf("  ");
-		 printf("%c %i\n", node->ch,node->count);
+		 printf("%c\n", node->ch);
 		if(node->child != NULL) trie_print(node->child, level+1);
 	}
 }
