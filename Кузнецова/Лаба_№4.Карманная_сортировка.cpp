@@ -7,24 +7,24 @@
 
 using namespace std;
 
-struct LIST                                       //список
+struct LIST                                      
 {                          
   float info; 
   LIST *next;
 } ;
 
 
-int Index(float el,float min)                    //вычисление номера кармана для элемента
+int Index(float el,float min)                    
 {
   return (int)floor((el-min)/10);
 }
 
   
-void InsertWithSort(LIST *&head, int el)        //добавление элемента в карман + сортировка
+void InsertWithSort(LIST *&head, int el)        
 {
   LIST *tmp = new LIST;
   tmp->info= el;
-  if (head == NULL)                            //если карман был пуст
+  if (head == NULL)                         
   {
     tmp->next = NULL;
     head = tmp;
@@ -32,12 +32,12 @@ void InsertWithSort(LIST *&head, int el)        //добавление элемента в карман +
   else
   {
     LIST *prew = head;
-    if (prew->info >= tmp->info)               //если добавляемый элемент меньше первого
+    if (prew->info >= tmp->info)               
     {
       tmp->next = prew;
       head = tmp;
     }
-    else                                      //если добавляемый элемент больше первого
+    else                                      
     {
       LIST *cur = prew->next;
       while (cur!=NULL)
@@ -70,7 +70,6 @@ void BucketSort (float *mas,int m,int pks,float g1,float g2)
     int j= (int)Index(mas[i],g1);
     InsertWithSort(buckets[j], mas[i]);
   }      
-                                                        //склеиваие карманов
   int l=0;
   for(int i=0; i<pks; i++) 
     while(buckets[i]!=NULL) 
@@ -87,7 +86,7 @@ int main()
    setlocale(LC_ALL,"Russian");    
     
     int otv1;    
-     cout<< "1) Числа из случайного массива "<< endl<< "2) Числа из файла"<< endl;
+     cout<< "1) generacia random "<< endl<< "2) iz faila"<< endl;
      cin>> otv1;
      switch(otv1)
      {
@@ -96,11 +95,11 @@ int main()
          int n;
          float c,b;
          float p;
-         cout<<"Введите количество чисел: ";
+         cout<<"kolichestvo elementov v massive: ";
          cin>>n;
          float a[n];
          
-         cout<<"Введите диапозон: "<<endl;
+         cout<<"granicy massiva: "<<endl;
          cin>>c>>b;
          srand ( time(NULL) );                     
          for(int i=0; i<n; i++)
@@ -113,16 +112,16 @@ int main()
          p=ceil((b-c)/10)+1;
          cout<<endl<<endl;
     
-         unsigned int start_time = clock();                                             // начальное время
+         unsigned int start_time = clock();                                             
          
          BucketSort (a,n,(int)p,c,b);
          
-         unsigned int search_time = clock() - start_time;                              // конечное время
-         cout<< "Элементы отсортированного массива: "<<endl; 
+         unsigned int search_time = clock() - start_time;                              
+         cout<< "otsortirovanniy massiv: "<<endl; 
          for(int i=0; i<n; i++)
            cout<<a[i]<< " ";
            
-                    cout<< endl << endl << "Время работы алгоритма: "<<search_time<<" млс"<<endl<<endl;
+                    cout<< endl << endl << "vremya raboty: "<<search_time<<" Г¬Г«Г±"<<endl<<endl;
 
          break;
        }  
@@ -131,10 +130,10 @@ int main()
        {
          int n;
          float f,c,b;
-         cout<<"Введите количество чисел: ";
+         cout<<"kolichestvo elementov: ";
          cin>>n;
          float a[n];
-         cout<<"Введите диапозон: "<<endl;
+         cout<<"granicy massiva: "<<endl;
          cin>>c>>b;
             
          ofstream fout("f1.txt");
@@ -147,7 +146,7 @@ int main()
           
          int k=0;                                      
          ifstream fin("f1.txt");                                            
-         cout<<"В файле f1: "<<endl;
+         cout<<"v faile f1: "<<endl;
          while (fin>>a[k])
          {              
           cout  <<a[k]<<"  "; 
@@ -159,12 +158,12 @@ int main()
          f=ceil((b-c)/10)+1;
          
          srand(time(NULL));
-         unsigned int start_time = clock();                                             // начальное время
+         unsigned int start_time = clock();                                            
          
          BucketSort (a,n,f,c,b);
                                           
-         unsigned int search_time = clock() - start_time;                              // конечное время
-         cout<< "Время работы алгоритма: "<<search_time<<" млс"<<endl<<endl;
+         unsigned int search_time = clock() - start_time;                             
+         cout<< "vremya raboty: "<<search_time<<" Г¬Г«Г±"<<endl<<endl;
                                         
          break;
       } 
