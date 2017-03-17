@@ -1,4 +1,4 @@
-
+﻿
 //Для заданного текста подсчитать колво слов состоящих только из согласных букв, используя trie деревья
 
 #include <set>
@@ -50,6 +50,7 @@ public:
         Vowels.insert('u');
         Vowels.insert('i');
         Vowels.insert('o');
+        Vowels.insert('y');
 
         kol = 0;
         begin = new TRIE;
