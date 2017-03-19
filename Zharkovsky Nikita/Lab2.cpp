@@ -70,7 +70,7 @@ int main()
 			case 1:{
     			cout<<"Enter the number of names: ";
     			int n,temp; cin>>n; temp=n;
-    			cout<<"Enter phone number, name, adress:"<<endl;
+    			cout<<"Enter phone number, name, adress (example: 88001232323 Alex Moscow):"<<endl;
     			while(n)
     			{
     				cout<<temp-n+1<<": ";
