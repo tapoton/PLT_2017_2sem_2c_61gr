@@ -1,15 +1,13 @@
 /*
-	Popov_ED 2 kurs 61 gruppa. 
-	laba2
-     Задан текстовый файл. Сформировать набор словосочетаний по 2 и более слова, 
-	 встречающихся в тексте не менее 2-х раз
+     Caaai oaenoiaue oaee. Noi?ie?iaaou iaai? neiaini?aoaiee ii 2 e aieaa neiaa, 
+	 ano?a?a?ueony a oaenoa ia iaiaa 2-o ?ac
  */
  #include<iostream>
  #include<string>
  #include <fstream>
  #include <cstdio>
 #include<cstring>
- #define HASHTAB_SIZE 20
+ #define HASHTAB_SIZE 10
  using namespace std;
  
  struct listnode {
@@ -61,14 +59,16 @@
  
  void find_words(struct listnode **hashtab)
  {
- 	listnode **q=hashtab;
- 	for (int i=0; i<HASHTAB_SIZE; i++)
  	
-	while (q[i])
+ 	for (int i=0; i<HASHTAB_SIZE; i++)
+ 	{
+	listnode *q=hashtab[i];
+	while (q)
 		{
-			if (q[i]->n>=2) cout<<q[i]->text;
-			q[i]=q[i]->next;
-		}				 
+			if (q->n>=2) cout<<q->text;
+			q=q->next;
+		}
+	}
  }
  	
  
@@ -108,10 +108,26 @@
 	fin.close();	
  }
  
+ void show(struct listnode **hashtab)
+ {
+
+ 	for (int i=0; i<HASHTAB_SIZE; i++)
+ 	{
+	 listnode *q=hashtab[i]; 
+	while (q)
+		{
+			cout<<" hashtab["<<i<<"]="<<q->text<<" ->n= "<<q->n<<" ";
+			q=q->next;
+		}
+	cout<<endl;
+	}
+ }
+ 
  int main()
  {
  	hashtab_init(hashtab);
- 	cout<<"Commands:"<<endl<<"1.Add text to the hash"<<endl<<"2.Search words whith are more than 2 times"<<endl<<"3.End the program";
+ 	cout<<"Commands:"<<endl<<"1.Add text to the hash"<<endl<<"2.Lookup hash table"<<endl<<"3.Search words whith are more than 2 times"<<endl
+	    <<"4.End the program";
  	int command;
  	while(1)
  	{
@@ -121,15 +137,19 @@
  		{
  			case 1:{
      			add_text(hashtab);										
-				
+				}
  				break;
- 				}
-			 case 2:{
+ 			
+ 			case 2:{
+ 				show(hashtab);
+				break;
+			 }
+			 case 3:{
 			 	cout<<"Words are more than 2 times:\n";
 			 	find_words(hashtab);
 				break;
 			 }
-			 case 3:{
+			 case 4:{
  				return 0;
  				break;
  			}
