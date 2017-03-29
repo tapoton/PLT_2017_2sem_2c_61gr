@@ -7,6 +7,7 @@ Moreover, when the table is filled above a given level its size shall be automat
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <time.h>
 
 using namespace std;
 
@@ -16,6 +17,7 @@ struct tablenode
  bool emp;                //flag of unit emptyness
 }; 
 tablenode *Begin;         //pointer to a table
+
 
 
 void Init (tablenode *T,int size)    
@@ -32,84 +34,97 @@ Initialization
 }
 
 
-int hesh(int key)
+
+int hash(int key, int s)
 /*
 Hash function
 */
 {
-  return key % 10;
+  return key % s;
 }
+
 
 
 void print(int size)
 {
-  tablenode *T1 = Begin;
-  cout<<"\n Таблица: ";   
-  for(int i=0; i<size; i++)
-    if(T1[i].emp==1)       
-      cout<<T1[i].x<<" "; 
-    else
-      cout<<"пусто  ";
-  cout<<endl;
+  tablenode *T = Begin;
+  int otv;
+  cout<<"Введите 1, если хотите вывод с 'пустыми'= п полями или 2 - без них: ";
+  cin>>otv;
+  cout<<"\n Таблица: ";
+  switch (otv)
+  {
+    case 1 :
+    {
+     for(int i=0; i<size; i++)
+     if(T[i].emp==1)       
+      cout<<T[i].x<<" "; 
+     else
+      cout<<"п  ";    
+     break;}
+    
+    case 2 :
+    {
+     for(int i=0; i<size; i++)
+     if(T[i].emp==1)       
+      cout<<T[i].x<<" ";     
+     break;}    
+  }  
+cout<<endl;
 }
 
 
-void addelem(int dat,int size, bool &noexp)   
-/*
-Adding an element
-noexp - flag of table fullness
-*/   
-{    
-  tablenode *T2=Begin;   
-  int i=hesh(dat);
-  if(!T2[i].emp)                 //if unit empty
-  {
-    T2[i].x=dat;
-    T2[i].emp=1; 
-  }      
-  else
-  {
-    int k=i;
-    i++;
-    bool t=0;
-    while(!t && i!=k)             //linear search
-    {       
-      if(!T2[i].emp)
-      {  
-        T2[i].x=dat;
-        T2[i].emp=1;
-        t=true;
-      }
-      i++;
-      if(i>=size)             
-        i=0; 
-    }
-    if(!t)                        //if table is full
-      noexp=0; 
-  }
-} 
 
 
-void expand(int dat,  int &size)
+void expand(int dat,  int &size, int step)
 /*
 Table expanding
 Increases table for 10 units. 
 */           
 {  
-  tablenode *T3=Begin;            
-  tablenode *Tmp= new tablenode[size+10]; 
-  Init(Tmp,size+10);
+  int size1 = size + step;           
+  tablenode *T=Begin;            
+  tablenode *Tmp= new tablenode[size1]; 
+  Init(Tmp,size1);
   
-  for(int j=10,i=0; j<size+10,i<size; j++,i++ )
-  {          
-    Tmp[j].x=T3[i].x;
-    Tmp[j].emp=T3[i].emp; 
+  for(int i=0; i<size; i++ )
+  {       
+    int j= hash(T[i].x,size1);              
+    Tmp[j].x=T[i].x;
+    Tmp[j].emp=T[i].emp; 
   } 
-  size=size+10; 
-  int k=hesh(dat);
-  Tmp[k].x=dat;
-  Tmp[k].emp=1; 
+  size=size1; 
+  int k=hash(dat,size);
+  if(!T[k].emp)                 //if unit empty
+  {
+    T[k].x=dat;
+    T[k].emp=1; 
+  }
+  else 
+    expand(dat,size, step);             
 }
+
+
+
+
+void addelem(int dat,int &size, int step)   
+/*
+Adding an element
+*/   
+{    
+  tablenode *T=Begin;   
+  int i=hash(dat,size);
+  if(T[i].x==dat)
+    return;
+  if(!T[i].emp)                 //if unit empty
+  {
+    T[i].x=dat;
+    T[i].emp=1; 
+  }      
+  else
+    expand(dat,size,step);
+     
+} 
 
 
 
@@ -118,26 +133,14 @@ int search (int dat, int size)
 Search an index by key(dat)
 */
 {
-  tablenode *Begin3 = Begin;    
-  int l = hesh(dat);
-  if( Begin3[l].emp &&  Begin3[l].x == dat)
+  tablenode *T = Begin;    
+  int l = hash(dat,size);
+  if( T[l].emp &&  T[l].x == dat)
     return l;
-  else                                            //if enother key in this unit
-  {  
-    int k=l;
-    l++;
-    while(l!=k)                                   //linear search
-    {       
-      if(Begin3[l].x == dat)
-        return l;
-      l++;
-      if(l>=size)             
-        l=0; 
-    }
-    cout<<"Такого элемента в таблице нет."<<endl;                     
-    return -1;
-  }  
+  cout<<"Такого элемента в таблице нет."<<endl;                     
+  return -1;
 }
+
 
 
 void keydelete(int dat, int size)
@@ -148,9 +151,9 @@ Deleting element
   int ind = search(dat,size);
   if (ind > 0)
   {
-    tablenode *Begin4 = Begin; 
-    Begin4[ind].emp = 0;
-    Begin4[ind].x = 0;      
+    tablenode *T = Begin; 
+    T[ind].emp = 0;
+    T[ind].x = 0;      
   }      
 }
 
@@ -160,22 +163,30 @@ int main()
 {
   setlocale(LC_ALL,"Russian"); 
   
-  int size = 10; 
-  tablenode *Table=new tablenode[size];
-  Init(Table,size);                                                 
+  int size,step,kol;
+  cout<<"Введите первоначальный размер таблицы: ";
+  cin>>size;
+  step = size;
+  cout<<"Введите количество элементов: ";
+  cin>>kol;
   
+  tablenode *Table = new tablenode[size];
+  Init(Table,size);     
+  
+  srand ( time(NULL) );                     
+
+  ofstream fout("f1.txt");
+  for(int i=0; i<kol; i++)
+    fout<<rand() % 500 << " ";
+  fout.close();    
+                                                                     
   int dat;
   
   ifstream fin("f1.txt");             
-                                             
-  while (fin>>dat)                                     //filling
-  {   
-    bool y=1;             
-    addelem(dat,size,y);                                   
-    if(!y)      
-      expand(dat,size);                  
-  }  
-  fin.close();     
+  while (fin>>dat)                                     //filling       
+    addelem(dat,size,step);                                   
+  fin.close(); 
+      
   print(size);
   
   int h;
