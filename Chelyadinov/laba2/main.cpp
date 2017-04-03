@@ -1,4 +1,4 @@
-﻿
+
 #include <string>
 #include <cstdlib>
 #include <iostream>
@@ -10,25 +10,24 @@ class hash_tabl {
 private:
     int kol_words;
 
+    struct node {
+        string word;
+        node *next;
+    };
+
     struct hash {
-        int count = 0;
+        int count;
         string word;
         hash *next;
     };
-    hash *begin[];
+    hash *begin[1000];
 
-    void Be_back_hash(hash* begin) {
-        hash *q = begin;
-        hash *t;
-        while (q->next != NULL) {
-            if ((q->count)<(q->next->count)) {
-                t = q;
-                q = q->next;
-                t->next = NULL;
-            } else if (q->count == q->next->count) {
-                q = q->next;
-            }
+    int Hash_func(string s) {
+        int index = 0;
+        for (int i = 0; i < s.length(); i++) {
+            index += s[i] - 'a';
         }
+        return index;
     }
 
     bool Check_space(string s) {
@@ -41,8 +40,8 @@ private:
 
     }
 
-    void Vivod_slovosochetaniy(hash *q, string s) {
-        hash *k;
+    void Vivod_slovosochetaniy(node *q, string s) {
+        node *k;
         if (Check_space(s))
             cout << &s[1] << endl;
         for (k = q; k != NULL; k = k->next) {
@@ -52,35 +51,31 @@ private:
 
     }
 
-    void Create_tabl(int i) {
 
-        for (int j = 0; j < i; j++) {
-            begin[j] = NULL;
-        }
-    }
 
-    string Cut_string(string &s) {
-        int i = 0;
-        string s1;
-        while (s[i] != ' ' && i < s.length()) {
-            s1 = s1 + s[i++];
-        }
-        s = &s[i + 1];
-        return s1;
-    }
+
 public:
     void GroupANDPrint_words();
     void Vvod_slov();
 
+    hash_tabl() {
+
+        for (int j = 0; j < 1000; j++) {
+            begin[j] = NULL;
+        }
+    }
+
     void Print() {
-        cout<<"\nVivod_hash_tablici:\n";
+        cout << "\nVivod_hash_tablici:\n";
         hash *q;
-        for (int j = 0; j < kol_words; j++) {
+        for (int j = 0; j < 1000; j++) {
             q = begin[j];
             while (q != NULL) {
-                cout << q->word << '-' << q->count << endl;
+                cout << q->word << '-' << q->count << ' ';
                 q = q->next;
             }
+            if (begin[j])
+                cout << endl;
         }
     }
 
@@ -92,95 +87,79 @@ int main(int argc, char** argv) {
     A.Vvod_slov();
     A.Print();
     A.GroupANDPrint_words();
-    A.Print();
     return 0;
 }
 
 void hash_tabl::Vvod_slov() {
-   kol_words = 1;
-    int k;
+    kol_words = 1;
+    int index;
     hash *q;
-    string s, s1;
+    string s;
     ifstream fin("input.txt");
-    fin>>s;
-    while (!fin.eof()) {
-        fin>>s1;
-        s = s + ' ' + s1;
-        kol_words++;
+    if (!fin) {
+        cout << "Zadan ne verniu put' k failu";
+        exit(0);
     }
-    Create_tabl(kol_words);
-    for (int j = 0; j < kol_words; j++) {
-        k = 0;
-        q = begin[0];
-        s1 = Cut_string(s); 
-        while (k < kol_words) {
-            if (q == NULL) {
-                if (k == kol_words - 1) {
-                    hash* h = new hash;
-                    h->word = s1;
-                    h->count++;
-                    h->next = begin[0];
-                    begin[0] = h;
-                    break;
-                }
-                k++;
-                q = begin[k];
-                
-
+    while (!fin.eof()) {
+        fin>>s;
+        index = Hash_func(s);
+        q = begin[index];
+        if (q == NULL) {
+            hash *h = new hash;
+            h->word = s;
+            h->count = 1;
+            h->next = NULL;
+            begin[index] = h;
+        } else {
+            if (q->word == s) {
+                q->count++;
             } else {
-                if (q->word == s1) {
-                    begin[k] = begin[k]->next;
-                    q->next = begin[k + 1];
-                    begin[k + 1] = q;
-                    q->count++;
-                    break;
-                } else {
-                    while (q->next && q->next->word != s1)
-                        q = q->next;
-                    if (q->next != NULL && q->next->word == s1) {
-                        hash *t = q->next;
-                        q->next = q->next->next;
-                        t->next = begin[k + 1];
-                        begin[k + 1] = t;
-                        t->count++;
+
+
+                while (q->next) {
+                    if (s == q->next->word) {
+                        q->next->count++;
                         break;
                     }
+                    q = q->next;
                 }
-                if (q != NULL)
-                q = q->next;
+                if (q->next == NULL) {
+                    hash *h = new hash;
+                    h->word = s;
+                    h->count = 1;
+                    h->next = NULL;
+                    q->next = h;
+                }
             }
-            
         }
     }
 }
 
 void hash_tabl::GroupANDPrint_words() {
-    hash* t;
-    
-    for (int k = 1; k < kol_words; k++) {  //объединяем все непустые списки начиная с индекса 1
-        if (begin[k] != NULL) {
-            hash* q = begin[k];
-            while (q->next != NULL) {
-                q = q->next;
+
+    string s;
+
+    hash *q;
+    node *begin_node = NULL;
+    ;
+    for (int j = 0; j < 1000; j++) {
+        q = begin[j];
+        while (q != NULL) {
+            if (q->count > 1) {
+                node *c = new node;
+                c->word = q->word;
+                c->next = begin_node;
+                begin_node = c;
             }
-            k++;
-            while (begin[k] == NULL && k < kol_words) {
-                k++;
-            }
-            if (k < kol_words)
-                q->next = begin[k];
-            k--;
+            q = q->next;
         }
     }
-    string s;
-    int k = 1;
-    while (begin[k] == NULL && k < kol_words) {
-        k++;
-    }
-    if(begin[k]!=NULL&&begin[k]->next!=NULL) //есть ли в списке более одного слова
-    {cout<<"\nSlovosochetaniya:\n";
-    Vivod_slovosochetaniy(begin[k], s);
-    Be_back_hash(begin[k]); //восстановление таблицы
-    } else cout<<"\nSlovosochetaniy net.\n";
+
+    if (begin_node != NULL && begin_node->next != NULL) //есть ли в списке более одного слова
+    {
+        cout << "\nSlovosochetaniya:\n";
+        Vivod_slovosochetaniy(begin_node, s);
+
+    } else cout << "\nSlovosochetaniy net.\n";
     
 }
