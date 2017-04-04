@@ -59,11 +59,11 @@ unsigned int hash_index (string value)
   
  void Insert_TAB (string value)
  {
-     Node *cur = new Node;
      Node *search = Search_TAB(value);
-     int index = hash_index(value);
      if (search == NULL)
      {
+	 	Node *cur = new Node;
+	 	int index = hash_index(value);
      	if (cur != NULL) 
 	 	{	
 		 	cur->value = value;
@@ -100,7 +100,7 @@ unsigned int hash_index (string value)
  
  int main()
  {	
- 	bool t = false;
+ 	bool t = true;
  	int n = 127, m = 18, i;
  	char text[n];
  	Create_TAB();
@@ -116,22 +116,30 @@ unsigned int hash_index (string value)
   	{	
 	  	if ((text[0] >= 'a'&& text[0] <= 'z') || (text[0] >= 'A' && text[0] <= 'Z'))
 		 {
-	 		for( int i = 0; i < n; i++)
-  				for( int j = 0; j < m ; j++)
-  			if (text[i]!=signs[j]) 
-  					t = true;
+		 	for (i = 0; text[i] != '\0'; i++);
+		 	
+  				if (text[i-1 ] == ';' || text[i-1 ] == '.' || text[i-1 ] == ':' || text[i-1 ] == ',')
+  							text[i-1]='\0';	
+  							
+	 		for (int l = 0; text[l] != '\0'; l++)
+  				for (int j = 0; j < m ; j++)
+  					if (text[l] == signs[j]) 
+  						{
+						  	t = false;
+							break;
+  						}
+  					
   		 }
-  		else 
-  			t = false;
-  		for (i=0; text[i]!='\0'; i++);
-  		if (text[i-1 ] == ';' || text[i-1 ] == '.' || text[i-1 ] == ':')
-  			text[i-1]='\0';
+  		 else
+  		 	t = false;
   		if (t)
   			Insert_TAB(text);
+  		t = true;
   	}
   	
   	Printf_TAB();
   	Remove_TAB();
+  	
  	return 0;
  }
  
