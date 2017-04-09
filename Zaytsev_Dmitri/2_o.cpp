@@ -17,7 +17,7 @@ struct cell
 	cell *next;
 };
 
-cell *table[99];
+cell *table[100];
 
 int f_hash(string phone_number)
 {
@@ -33,9 +33,9 @@ int f_hash(string phone_number)
 void out(cell *now)
 {
 	cout<<"---------------------------------------------------------------"<<endl;
-	cout<<"Íîìåð òåëåôîíà: "<<now->data.phone_number<<endl;
-	cout<<"ÔÈÎ: "<<now->data.fio<<endl;
-	cout<<"Àäðåñ: "<<now->data.address<<endl;
+	cout<<"ÃÃ®Ã¬Ã¥Ã° Ã²Ã¥Ã«Ã¥Ã´Ã®Ã­Ã : "<<now->data.phone_number<<endl;
+	cout<<"Ã”ÃˆÃŽ: "<<now->data.fio<<endl;
+	cout<<"Ã€Ã¤Ã°Ã¥Ã±: "<<now->data.address<<endl;
 	cout<<"---------------------------------------------------------------"<<endl;	
 }
 
@@ -71,7 +71,7 @@ void insert(void)
 	int hash_now;
 	cell *now;
 	now=new cell;
-	cout<<"Ââåäèòå íîìåð òåëåôîíà"<<endl;
+	cout<<"Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã­Ã®Ã¬Ã¥Ã° Ã²Ã¥Ã«Ã¥Ã´Ã®Ã­Ã "<<endl;
 	cin.ignore();
 	getline(cin , temp);
 	hash_now = f_hash(temp);
@@ -83,10 +83,10 @@ void insert(void)
 	now->next = table[hash_now]->next;
 	table[hash_now]->next = now;
 	now->data.phone_number = temp;
-	cout<<"Ââåäèòå ÔÈÎ"<<endl;
+	cout<<"Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã”ÃˆÃŽ"<<endl;
 	cin.ignore(0);
 	getline(cin , now->data.fio);
-	cout<<"Ââåäèòå àäðåñ"<<endl;
+	cout<<"Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã Ã¤Ã°Ã¥Ã±"<<endl;
 	cin.ignore(0);
 	getline(cin , now->data.address);
 }
@@ -98,7 +98,7 @@ int main()
 	bool trig;
 	while(1)
 	{
-		cout<<"Ââåñòè íîâóþ ÿ÷åéêó? 1/0"<<endl;
+		cout<<"Ã‚Ã¢Ã¥Ã±Ã²Ã¨ Ã­Ã®Ã¢Ã³Ã¾ Ã¿Ã·Ã¥Ã©ÃªÃ³? 1/0"<<endl;
 		cin>>trig;
 		if(trig == 0)
 		{
@@ -114,7 +114,7 @@ int main()
 	cell *now;
 	while(1)
 	{
-		cout<<endl<<"Èñêàòü ÷åëîâåêà ïî íîìåð? 1/0"<<endl;
+		cout<<endl<<"ÃˆÃ±ÃªÃ Ã²Ã¼ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ  Ã¯Ã® Ã­Ã®Ã¬Ã¥Ã°? 1/0"<<endl;
 		cin>>trig;
 		if(trig == 0)
 		{
@@ -122,18 +122,18 @@ int main()
 		}
 		else
 		{
-			cout<<"Ââåäèòå èñêîìûé íîìåð"<<endl;
+			cout<<"Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã¨Ã±ÃªÃ®Ã¬Ã»Ã© Ã­Ã®Ã¬Ã¥Ã°"<<endl;
 			cin.ignore();
 			getline(cin , s_num);
 			now=search(s_num);
 			if(now != NULL)
 			{
-				cout<<endl<<"Íîìåð íàéäåí."<<endl;
+				cout<<endl<<"ÃÃ®Ã¬Ã¥Ã° Ã­Ã Ã©Ã¤Ã¥Ã­."<<endl;
 				out(now);
 			}
 			else
 			{
-				cout<<endl<<"Íîìåð íå íàéäåí"<<endl;	
+				cout<<endl<<"ÃÃ®Ã¬Ã¥Ã° Ã­Ã¥ Ã­Ã Ã©Ã¤Ã¥Ã­"<<endl;	
 			}
 		}
 	}
