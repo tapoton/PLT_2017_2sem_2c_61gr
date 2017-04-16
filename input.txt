@@ -1,0 +1,21 @@
+Program Converting_2_in_10;
+var a: string;
+ 
+function BIN_DEC ( x: string ) : longint ;
+const digits: array [0..1] of char = (' 0 ' , ' 1 ') ;
+var res , ves: longint; i , j: byte ;
+begin
+   res := 0; ves := 1;
+   for i := length ( x ) downto 1 do begin
+      j := 0;
+      while ( digits [ j ] <> x [ i ] ) do inc ( j );
+      res := res + ves * j;
+      ves := ves * 2;
+   end ;
+   BIN_DEC := res;
+end;
+ 
+begin 
+  readln ( a );
+  writeln ( BIN_DEC ( a ) );
+end.
