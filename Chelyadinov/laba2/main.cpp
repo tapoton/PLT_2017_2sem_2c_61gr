@@ -25,9 +25,9 @@ private:
     int Hash_func(string s) {
         int index = 0;
         for (int i = 0; i < s.length(); i++) {
-            index += s[i] - 'a';
+            index += s[i] - 'a'+1;
         }
-        return index;
+        return index%1000;
     }
 
     bool Check_space(string s) {
