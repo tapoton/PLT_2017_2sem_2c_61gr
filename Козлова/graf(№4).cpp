@@ -8,6 +8,7 @@ bool verifdata(int **,int ); //verification of data
 void init(int *,int);     //zeroing of parents
 int Kruskal(int **,int*,int); //search of weight
 int **Matrix(int &n); //count's task
+bool prover(int ,int,int* );
 
 int main()
 {
@@ -70,10 +71,10 @@ bool verifdata(int **mas,int n)
 void init(int *mas,int n) 
 {
  for(int i=0;i<n;i++)
-  mas[i]=0;
+  mas[i]=i;
 }
 
-int Kruskal(int **mas,int *masprob,int n)
+int Kruskal(int **mas,int *parent,int n)
 {
  int weight=0;
  int nprob=n-1;
@@ -88,24 +89,24 @@ int Kruskal(int **mas,int *masprob,int n)
      in=i;
      jn=j;
     }
-   if(masprob[jn]!=0 && masprob[in]==0) 
-   {
-     int tmp=in;
-     in=jn;
-     jn=tmp;
-   }
-   if(masprob[jn]==0 && masprob[in]!=jn)
-   {
-    if(masprob[in]!=0) masprob[jn]=masprob[in];
-     else masprob[jn]=in;
-    for(int i=0;i<n;i++)
-     if(masprob[i]==jn) masprob[i]=masprob[jn]; 
-    weight+=min;
-    --nprob;
-   }
-   mas[in][jn]=0;
-   mas[jn][in]=0;
+  if(prover(in,jn,parent))
+  {
+   cout<<"edge ("<<(in+1)<<","<<(jn+1)<<")="<<min<<endl;
+   weight+=min;
+   int tmp=parent[jn];
+   for(int i=0;i<n;i++)
+    if(parent[i]==tmp) parent[i]=parent[in];
+   --nprob;
+  }
+  mas[in][jn]=0;
+  mas[jn][in]=0;
  }
  return weight;
+}
+
+bool prover(int i,int j,int *parent)
+{
+  if(parent[i]!=parent[j]) return 1; 
+  return 0;
 }
 
