@@ -10,11 +10,20 @@ def delete_versh(graph):
     delete=list(set(check)^set(range(len(graph))))
     #print delete
     if delete!=[]:
-        print "Udaleni vershini: ",
-        for i in delete:
-            graph[i]=[]
-            print i," ",
+        dec=0
+        print "Udaleni vershini: ",delete
+        for i in range(len(graph)):
+            if i in delete:
+                dec=dec+1
+                graph[i]=['del']
+            elif dec>0:
+                for j in range(len(graph[i])):
+                    graph[i][j]=graph[i][j]-dec        
+            
         print
+
+        for i in range(dec):
+            graph.remove(['del']);
     else:
         print "Nichego ne udaleno"
     print_graph(graph)
