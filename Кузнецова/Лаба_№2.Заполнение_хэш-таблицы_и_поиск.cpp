@@ -1,8 +1,12 @@
+
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <cstdio>
+#include <stdio.h>
 #include <cstring>
+#include <windows.h>
+#include <conio.h>
 
 #define HASHTAB_SIZE 10
 
@@ -17,7 +21,7 @@ struct actor
 struct film
 {
 	string name;
-	string producer;
+	actor producer;
 	actor actors[5];
 	string summary;
 	film *next;
@@ -50,7 +54,7 @@ void hashtab_add(film **hashtab, string name)
 	{
 		(*node).name = name;
 		cout << endl << "Введите имя режиссера " << endl;
-		cin >> (*node).producer;
+		cin >> (*node).producer.name >> (*node).producer.surname;
 		cout << endl << "Введите 5 актеров " << endl;
 
 		for (int i = 0; i < 5; i++)
@@ -58,7 +62,8 @@ void hashtab_add(film **hashtab, string name)
 			cin >> ((*node).actors[i]).name >> ((*node).actors[i]).surname;
 		}
 
-		cout << endl << "Расскажите краткое содержание фильма";
+		cout << endl << "Расскажите краткое содержание фильма" << endl;
+		cin.ignore();
 		getline(cin, (*node).summary);
 
 		cout << endl;
@@ -92,43 +97,50 @@ void show(film **hashtab)
 
 	if (q)
 	{
-		cout << "По запросу " << text << "найдено: " << endl;
-		cout << "Режиссер : " << hashtab[hashtab_hash(text)]->producer << endl;
+		cout << endl << "****************************************************************************************" << endl;
+		cout << "По запросу '" << text << "' найдено: " << endl;
+		cout << "Режиссер : " << hashtab[hashtab_hash(text)]->producer.name << " " << hashtab[hashtab_hash(text)]->producer.surname << endl;
 		cout << "В фильме снимались : | ";
 		for (int i = 0; i < 5; i++)
-			cout << hashtab[hashtab_hash(text)]->actors[i].surname << " " << hashtab[hashtab_hash(text)]->actors[i].surname << " | ";
+			cout << hashtab[hashtab_hash(text)]->actors[i].name << " " << hashtab[hashtab_hash(text)]->actors[i].surname << " | ";
 		cout << endl << "Краткое содержание фильма : " << hashtab[hashtab_hash(text)]->summary << endl;
+		cout << "****************************************************************************************" << endl;
 	}
 
 }
 
 int main()
 {
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 	hashtab_init(hashtab);
-	setlocale(LC_ALL, "RUSSIAN");
 
-	cout << "Какую операцию выполнить?" << endl << "1.Добавить элемент в таблицу." << endl << "2.Найти информацию о фильме." << endl << "3. Закончить программу." << endl;
+	cout << "Какую операцию выполнить?" << endl << "1. Добавить элемент в таблицу." << endl << "2. Найти информацию о фильме." << endl << "3. Закончить программу." << endl;
 	int command;
 	cin >> command;
 
-loop1:
-	if (command == 1)
+	while (command != 3)
 	{
-		cout << "Введите название фильма." << endl;
-		string text;
-		cin >> text;
-		hashtab_add(hashtab, text);
-		cin >> command;
-		goto loop1;
-	}
+		if (command == 1)
+		{
+			cout << "Введите название фильма." << endl;
+			string text;
+			cin >> text;
+			hashtab_add(hashtab, text);
+			cout << endl << "Введите команду" << endl;
+			cin >> command;
+		}
 
-	if (command == 2)
-	{
-		show(hashtab);
-		cin >> command;
-		goto loop1;
+		if (command == 2)
+		{
+			show(hashtab);
+			cout << "Введите команду" << endl;
+			cin >> command;
+		}
 	}
 
 	system("PAUSE");
 	return 0;
 }
+
+
