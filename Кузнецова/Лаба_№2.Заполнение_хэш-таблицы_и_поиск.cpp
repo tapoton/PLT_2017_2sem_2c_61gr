@@ -53,16 +53,16 @@ void hashtab_add(film **hashtab, string name)
 	if (node != NULL)
 	{
 		(*node).name = name;
-		cout << endl << "Ââåäèòå èìÿ ðåæèññåðà " << endl;
+		cout << endl << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¸Ð¼Ñ Ñ€ÐµÐ¶Ð¸ÑÑÐµÑ€Ð° " << endl;
 		cin >> (*node).producer.name >> (*node).producer.surname;
-		cout << endl << "Ââåäèòå 5 àêòåðîâ " << endl;
+		cout << endl << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ 5 Ð°ÐºÑ‚ÐµÑ€Ð¾Ð² " << endl;
 
 		for (int i = 0; i < 5; i++)
 		{
 			cin >> ((*node).actors[i]).name >> ((*node).actors[i]).surname;
 		}
 
-		cout << endl << "Ðàññêàæèòå êðàòêîå ñîäåðæàíèå ôèëüìà" << endl;
+		cout << endl << "Ð Ð°ÑÑÐºÐ°Ð¶Ð¸Ñ‚Ðµ ÐºÑ€Ð°Ñ‚ÐºÐ¾Ðµ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ð½Ð¸Ðµ Ñ„Ð¸Ð»ÑŒÐ¼Ð°" << endl;
 		cin.ignore();
 		getline(cin, (*node).summary);
 
@@ -87,23 +87,23 @@ film *hashtab_lookup(film **hashtab, string text)
 
 void show(film **hashtab)
 {
-	cout << "Êàêîé ôèëüì íàéòè?" << endl;
+	cout << "ÐšÐ°ÐºÐ¾Ð¹ Ñ„Ð¸Ð»ÑŒÐ¼ Ð½Ð°Ð¹Ñ‚Ð¸?" << endl;
 	string text;
 	cin >> text;
 	film *q = hashtab_lookup(hashtab, text);
 
 	if (!q)
-		cout << "Òàêîãî ôèëüìà íåò â ñïèñêå\n";
+		cout << "Ð¢Ð°ÐºÐ¾Ð³Ð¾ Ñ„Ð¸Ð»ÑŒÐ¼Ð° Ð½ÐµÑ‚ Ð² ÑÐ¿Ð¸ÑÐºÐµ\n";
 
 	if (q)
 	{
 		cout << endl << "****************************************************************************************" << endl;
-		cout << "Ïî çàïðîñó '" << text << "' íàéäåíî: " << endl;
-		cout << "Ðåæèññåð : " << hashtab[hashtab_hash(text)]->producer.name << " " << hashtab[hashtab_hash(text)]->producer.surname << endl;
-		cout << "Â ôèëüìå ñíèìàëèñü : | ";
+		cout << "ÐŸÐ¾ Ð·Ð°Ð¿Ñ€Ð¾ÑÑƒ '" << text << "' Ð½Ð°Ð¹Ð´ÐµÐ½Ð¾: " << endl;
+		cout << "Ð ÐµÐ¶Ð¸ÑÑÐµÑ€ : " << hashtab[hashtab_hash(text)]->producer.name << " " << hashtab[hashtab_hash(text)]->producer.surname << endl;
+		cout << "Ð’ Ñ„Ð¸Ð»ÑŒÐ¼Ðµ ÑÐ½Ð¸Ð¼Ð°Ð»Ð¸ÑÑŒ : | ";
 		for (int i = 0; i < 5; i++)
 			cout << hashtab[hashtab_hash(text)]->actors[i].name << " " << hashtab[hashtab_hash(text)]->actors[i].surname << " | ";
-		cout << endl << "Êðàòêîå ñîäåðæàíèå ôèëüìà : " << hashtab[hashtab_hash(text)]->summary << endl;
+		cout << endl << "ÐšÑ€Ð°Ñ‚ÐºÐ¾Ðµ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ð½Ð¸Ðµ Ñ„Ð¸Ð»ÑŒÐ¼Ð° : " << hashtab[hashtab_hash(text)]->summary << endl;
 		cout << "****************************************************************************************" << endl;
 	}
 
@@ -115,7 +115,7 @@ int main()
 	SetConsoleOutputCP(1251);
 	hashtab_init(hashtab);
 
-	cout << "Êàêóþ îïåðàöèþ âûïîëíèòü?" << endl << "1. Äîáàâèòü ýëåìåíò â òàáëèöó." << endl << "2. Íàéòè èíôîðìàöèþ î ôèëüìå." << endl << "3. Çàêîí÷èòü ïðîãðàììó." << endl;
+	cout << "ÐšÐ°ÐºÑƒÑŽ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸ÑŽ Ð²Ñ‹Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÑŒ?" << endl << "1. Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ Ð² Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñƒ." << endl << "2. ÐÐ°Ð¹Ñ‚Ð¸ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸ÑŽ Ð¾ Ñ„Ð¸Ð»ÑŒÐ¼Ðµ." << endl << "3. Ð—Ð°ÐºÐ¾Ð½Ñ‡Ð¸Ñ‚ÑŒ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñƒ." << endl;
 	int command;
 	cin >> command;
 
@@ -123,18 +123,18 @@ int main()
 	{
 		if (command == 1)
 		{
-			cout << "Ââåäèòå íàçâàíèå ôèëüìà." << endl;
+			cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ Ñ„Ð¸Ð»ÑŒÐ¼Ð°." << endl;
 			string text;
 			cin >> text;
 			hashtab_add(hashtab, text);
-			cout << endl << "Ââåäèòå êîìàíäó" << endl;
+			cout << endl << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñƒ " << endl;
 			cin >> command;
 		}
 
 		if (command == 2)
 		{
 			show(hashtab);
-			cout << "Ââåäèòå êîìàíäó" << endl;
+			cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñƒ" << endl;
 			cin >> command;
 		}
 	}
