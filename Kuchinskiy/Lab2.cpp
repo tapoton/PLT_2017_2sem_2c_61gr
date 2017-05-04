@@ -1,5 +1,6 @@
-// Lab2.cpp: определяет точку входа для консольного приложения.
+// Lab2.cpp: Count of collisions
 //
+
 #define _CRT_SECURE_NO_WARNINGS
 #include "stdafx.h"
 #include <cstdlib>
@@ -22,7 +23,8 @@ struct node
 struct tablenode
 {
 	char *x;
-	int count;                
+	int count;
+	tablenode *next;
 };
 int colCount1 = 0, colCount2 = 0, colCount3 = 0;
 tablenode *T1;
@@ -42,6 +44,7 @@ Initialization
 		T[i].count = 0;
 		T[i].x = new char[20];
 		T[i].x = "#";
+		T[i].next =NULL;
 	}
 }
 
@@ -66,11 +69,10 @@ int hash2(char key[], int s)
 }
 int hash3(char key[], int s)
 {
-	srand(time(0));
-	int r = rand() % 2;
-	if (r == 0)
-		return hash1(key, s);
-	return hash2(key, s);
+	int h = 0;
+	for (int i = 0;key[i] != NULL;i++)
+		h = 13 * h + (unsigned char)key[i];
+	return h % s;
 }
 
 
@@ -78,107 +80,110 @@ int hash3(char key[], int s)
 void print(tablenode *T, int size)
 {
 	int otv;
-	cout << "Введите 1, если хотите вывод с 'пустыми'= п полями или 2 - без них: ";
+	cout << "Р’РІРµРґРёС‚Рµ 1, С‡С‚РѕР±С‹ РІС‹РІРµСЃС‚Рё СЃ РїСѓСЃС‚С‹РјРё СЏС‡РµР№РєР°РјРё, 2, С‡С‚РѕР±С‹ РІС‹РІРµСЃС‚Рё Р±РµР· РЅРёС…: ";
 	cin >> otv;
-	cout << "\n Таблица: ";
+	cout << endl;
 	switch (otv)
 	{
 	case 1:
 	{
 		for (int i = 0; i < size; i++)
-			cout << T[i].x<<" ";
+		{
+			cout << T[i].x << " ";
+			tablenode *tmp = T[i].next;
+			while (tmp != NULL)
+			{
+				cout << tmp->x << " ";
+				tmp = tmp->next;
+			}
+		}
 		break;}
 
 	case 2:
 	{
-		for (int i = 0; i<size; i++)
+		for (int i = 0; i < size; i++)
+		{
 			if (T[i].count>0)
-				cout << T[i].x << " ";
+			cout << T[i].x << " ";
+			tablenode *tmp = T[i].next;
+			while (tmp)
+				if (T[i].count>0)
+					cout << tmp->x << " ";
+		}
 		break;}
 	}
 	cout << endl;
 }
 
-void expand(tablenode *T, char dat[], int &size, int step, int menu)
-/*
-Table expanding
-Increases table for 10 units.
-*/
-
-{
-	int size0 = size + step;
-	tablenode *Tmp = new tablenode[size0];
-	Init(Tmp, size0);
-	switch (menu)
-	{
-	case 1: {T1 = Tmp; break;}
-	case 2: {T2 = Tmp; break;}
-	case 3: {T3 = Tmp; break;}
-	}
-
-	for (int i = 0; i < size; i++)
-		addelem(Tmp, T[i].x, size0, step, menu);
-	size = size0;
-	addelem(Tmp, dat, size0, step, menu);
-}
 
 
-
-
-
-
-void addelem(tablenode *T,char dat[], int &size, int step, int menu)
-/*
-Adding an element
-*/
+int Hash(int menu, char dat[], int size)
 {
 	int i;
 	switch (menu)
 	{
-		case 1: {i = hash1(dat, size); break;}
-		case 2: {i = hash2(dat, size); break;}
-		case 3: {i = hash3(dat, size); break;}
-		default:break;
+	case 1: {i = hash1(dat, size); break;}
+	case 2: {i = hash2(dat, size); break;}
+	case 3: {i = hash3(dat, size); break;}
+	default:break;
 	}
-	//cout << dat<<" "<<i<<" ";
-	int j;
-	for (j=i;j<size;j++)
-		if (T[j].count == 0)
-		{
-			T[j].count=1;
-			T[j].x = dat;
-			if (i!=j)
-				switch (menu)
-				{
-					case 1: {colCount1++; break;}
-					case 2: {colCount2++; break;}
-					case 3: {colCount3++; break;}
-					default:break;
-				}
-			//cout << j <<" fill "<< T[j].x<< endl;
-			break;
-		}
-		else if (strcmp(T[j].x,dat)==0)
-		{
-			T[j].count=T[j].count+1;
-			//cout << j <<" found "<< T[j].x <<endl;
-			break;
-		}
-	//print(T,size);
-	if (j == size)
-	{
-		if (i != j)
-			switch (menu)
-			{
-				case 1: {colCount1 = 0; break;}
-				case 2: {colCount2=0; break;}
-				case 3: {colCount3=0; break;}
-				default:break;
-			}
-		expand(T, dat, size, step, menu);
-	}
-	return;
+	return i;
+}
 
+void Collision(int menu)
+{
+	switch (menu)
+	{
+	case 1: {colCount1++; break;}
+	case 2: {colCount2++; break;}
+	case 3: {colCount3++; break;}
+	default:break;
+	}
+}
+
+void addelem(tablenode *T, char dat[], int &size, int step, int menu)
+/*
+Adding an element
+*/
+{
+	int i= Hash(menu, dat, size);
+	
+	//cout << dat<<" "<<i<<" ";
+	if ((strcmp(T[i].x, dat) == 0) || T[i].count==0)
+	{
+		T[i].count++;
+		T[i].x = dat;
+	}
+	else
+	{
+		if (T[i].next == NULL)
+		{
+			T[i].next = new tablenode;
+			T[i].next->x = dat;
+			T[i].next->count = 1;
+			T[i].next->next = NULL;
+			Collision(menu);
+		}
+		else
+		{
+			tablenode *tmp = T[i].next;
+			while ((strcmp(tmp->x, dat) != 0) && tmp->next)
+			{
+				tmp = tmp->next;
+			}
+			if (strcmp(tmp->x, dat) != 0)
+			{
+				Collision(menu);
+				tmp->next = new tablenode;
+				tmp = tmp->next;
+				tmp->next = NULL;
+				tmp->count = 1;
+				tmp->x = dat;
+			}
+			else tmp->count++;
+		}
+	}
+			
 }
 
 
@@ -188,7 +193,7 @@ int main()
 	setlocale(LC_ALL, "Russian");
 	int kol;
 	int size1, size2, size3;
-	size1=size2=size3 = 20;
+	size1 = size2 = size3 = 20;
 	int step = 10;
 
 	tablenode *Table1 = new tablenode[size1];
@@ -200,7 +205,7 @@ int main()
 	T1 = Table1;
 	T2 = Table2;
 	T3 = Table3;
-	char str[500]="";
+	char str[500] = "";
 	char str1[50];
 	ifstream fin("input.txt");
 	while (!fin.eof())
@@ -224,7 +229,7 @@ int main()
 	print(T2, size2);
 	print(T3, size3);
 	cout << size1 << " " << size2 << " " << size3 << endl;
-	cout << "Collision Count 1: " << colCount1 << "\nCollision Count 2: " << colCount2 << "\nCollision Count 3: " << colCount3 << "\nAverage Collision Count: " << (colCount1+colCount2+colCount3)/3 << endl;
+	cout << "Collision Count 1: " << colCount1 << "\nCollision Count 2: " << colCount2 << "\nCollision Count 3: " << colCount3 << "\nAverage Collision Count: " << (colCount1 + colCount2 + colCount3) / 3 << endl;
 	_getch();
 	return 0;
 }
