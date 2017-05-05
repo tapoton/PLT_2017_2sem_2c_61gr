@@ -107,8 +107,11 @@ void print(tablenode *T, int size)
 			cout << T[i].x << " ";
 			tablenode *tmp = T[i].next;
 			while (tmp)
+			{
 				if (T[i].count>0)
 					cout << tmp->x << " ";
+				tmp = tmp->next;
+			}
 		}
 		break;}
 	}
