@@ -45,38 +45,26 @@ void Deikstra(int N, int max, bool *vi, int *ds, int k, Route R[], int d, int v)
   do
   {            
     minind = N+1;
-    int min1 = max;
-    int i=d;
-    do                          //Search for unvisited vertex with min label 
-    {
-      if (!vi[i] && ds[i]<min1)                                     
-      {                            
+    int min1 = max;                       
+    for (int i=0; i<N; i++)     //Search for unvisited vertex with min label                             
+      if (!vi[i] && ds[i]<min1)  
+      {                             
         min1 = ds[i];
         minind = i;
       }
-      i++;
-      if(i >= N)
-        i=0;
-    }while(i!=d);
-    
+      
     if (minind != N+1)           //If we found it
-    {
-      int i=d;
-      do                  
-      {                   
-        for(int j=0; j<k; j++)                           //Look through all neighbors of this village and if we find smaller arrive time - re-label them
-          if(R[j].depart == i+1 && R[j].depart >= min1 && R[j].tarrive < ds[R[j].arrive - 1])                    
-            ds[R[j].arrive - 1] = R[j].tarrive;  
-        i++;
-        if(i >= N)
-          i=0;      
-      }while(i!= d);
-      vi[minind] = 1;      //Mark the village as visited one 
-      if (minind == v)
-        return;
+    {                
+      for(int j=0; j<k; j++)     //Look through all neighbors of this village and if we find smaller arrive time - re-label them
+        if(R[j].depart == minind+1 && R[j].tdepart >= min1 && R[j].tarrive < ds[R[j].arrive - 1])                    
+            ds[R[j].arrive - 1] = R[j].tarrive; 
     }
+    vi[minind] = 1;      //Mark the village as visited one 
+    if (minind == v)
+      return;
   }while(minind < N+1);      
 }
+
 
 
 
