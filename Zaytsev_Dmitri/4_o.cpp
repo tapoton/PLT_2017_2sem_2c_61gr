@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "iostream"
 #include "string"
+#include "float.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ void input(float *m)
 			cin>>temp;
 			if (temp == -1)
 			{
-				temp=INT_MAX;
+				temp=FLT_MAX;
 			}
 			*( m + i * Num + j) = *( m + j * Num + i) = temp;
 		}
@@ -50,7 +51,7 @@ float find_max(float *m)
 	{
 		for(int j = i + 1 ; j < Num ; ++j)
 		{
-			if ( ( max < *( m + j * Num + i)) && (*( m + j * Num + i) != INT_MAX) )
+			if ( ( max < *( m + j * Num + i)) && (*( m + j * Num + i) != FLT_MAX) )
 			{
 				max=*( m + j * Num + i);
 			}
