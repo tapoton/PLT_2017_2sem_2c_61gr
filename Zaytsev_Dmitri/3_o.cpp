@@ -15,7 +15,7 @@ void input(float *m, string *name)
 	cin.ignore(1);
 	for (int i = 0; i < City_Num ; ++i)
 	{
-		cout<< "Ââåäèòå íàçâàíèå " << i + 1 << " ãîðîäà: ";
+		cout<< "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã­Ã Ã§Ã¢Ã Ã­Ã¨Ã¥ " << i + 1 << " Ã£Ã®Ã°Ã®Ã¤Ã : ";
 		getline(cin , name[i]);
 	}
 	for (int i = 0 ; i < City_Num ; ++i)
@@ -26,7 +26,7 @@ void input(float *m, string *name)
 	{
 		for (int j = i + 1; j < City_Num ; ++j)
 		{
-			cout<< "Ââåäèòå ðàññòîÿíèå îò " << name[i] << " äî " << name[j] << " (Åñëè äîðîãè íåò, ââåäèòå -1) : ";
+			cout<< "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã°Ã Ã±Ã±Ã²Ã®Ã¿Ã­Ã¨Ã¥ Ã®Ã² " << name[i] << " Ã¤Ã® " << name[j] << " (Ã…Ã±Ã«Ã¨ Ã¤Ã®Ã°Ã®Ã£Ã¨ Ã­Ã¥Ã², Ã¢Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ -1) : ";
 			cin.ignore(0);
 			cin>>temp;
 			if (temp == -1)
@@ -88,7 +88,7 @@ void optim_(float *m)
 
 void n_peref(float *m, string *name)
 {
-	cout<< "Ââåäèòå ðàäèóñ èñêîìîé ïåðåôåðèè: ";
+	cout<< "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã°Ã Ã¤Ã¨Ã³Ã± Ã¨Ã±ÃªÃ®Ã¬Ã®Ã© Ã¯Ã¥Ã°Ã¥Ã´Ã¥Ã°Ã¨Ã¨: ";
 	float r;
 	cin>>r;
 	bool trig = 0;
@@ -97,7 +97,7 @@ void n_peref(float *m, string *name)
 	while (!trig)
 	{
 		cin.ignore();
-		cout<< "Ââåäèòå öåíòð ïåðåôåðèè: ";
+		cout<< "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã¶Ã¥Ã­Ã²Ã° Ã¯Ã¥Ã°Ã¥Ã´Ã¥Ã°Ã¨Ã¨: ";
 		getline(cin , center);
 		for (int i = 0 ; i < City_Num ; ++i)
 		{
@@ -113,13 +113,13 @@ void n_peref(float *m, string *name)
 		}
 		if(!trig)
 		{
-			cout<< "Òàêîãî ãîðîäà íåò" << endl;
+			cout<< "Ã’Ã ÃªÃ®Ã£Ã® Ã£Ã®Ã°Ã®Ã¤Ã  Ã­Ã¥Ã²" << endl;
 			return;
 		}
 	}
 	trig = 0;
 	optim_(m);
-	cout<< "N-ïåðåôåðèÿ ãîðîäà " << name[end] << ": ";
+	cout<< "N-Ã¯Ã¥Ã°Ã¥Ã´Ã¥Ã°Ã¨Ã¿ Ã£Ã®Ã°Ã®Ã¤Ã  " << name[end] << ": ";
 	for (int i = 0 ; i < City_Num ; ++i)
 	{
 		if ((*( m + end * City_Num + i) <= r) && (i != end))
@@ -130,7 +130,7 @@ void n_peref(float *m, string *name)
 	}
 	if (!trig)
 	{
-		cout<< "Îòñóòñòâóåò";
+		cout<< "ÃŽÃ²Ã±Ã³Ã²Ã±Ã²Ã¢Ã³Ã¥Ã²";
 	}
 	cout<<endl;
 }
@@ -139,16 +139,15 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 	int n;
-	cout<< "Ââåäèòå êîëè÷åñòâî ãîðîäîâ: ";
+	cout<< "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ ÃªÃ®Ã«Ã¨Ã·Ã¥Ã±Ã²Ã¢Ã® Ã£Ã®Ã°Ã®Ã¤Ã®Ã¢: ";
 	cin>>City_Num;
 	float m[City_Num][City_Num];
-	string name[City_Num];
 	input(*m , name);
 	cout<<endl;
 	bool trig = 1;
 	while (trig)
 	{
-		cout<< endl << "Âû÷èñëèòü N-ïåðåôåðèþ? (1/0): ";
+		cout<< endl << "Ã‚Ã»Ã·Ã¨Ã±Ã«Ã¨Ã²Ã¼ N-Ã¯Ã¥Ã°Ã¥Ã´Ã¥Ã°Ã¨Ã¾? (1/0): ";
 		cin>>trig;
 		if(trig)
 		{
