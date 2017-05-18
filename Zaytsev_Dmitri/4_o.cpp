@@ -13,7 +13,7 @@ void input(float *m)
 	float temp;
 	for (int i = 0 ; i < Num ; ++i)
 	{
-		cout<< "Ââåäèòå ñòðîêó ¹ " << i+1<<":"<<endl;
+		cout<< "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã±Ã²Ã°Ã®ÃªÃ³ Â¹ " << i+1<<":"<<endl;
 		for (int j = 0; j < Num ; ++j)
 		{
 			cin>>temp;
@@ -64,13 +64,12 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 	int n;
-	cout<< "Ââåäèòå êîëè÷åñòâî âåðøèí: ";
+	cout<< "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ ÃªÃ®Ã«Ã¨Ã·Ã¥Ã±Ã²Ã¢Ã® Ã¢Ã¥Ã°Ã¸Ã¨Ã­: ";
 	cin>> Num;
 	float m[Num][Num];
-	string name[Num];
 	input(*m);
 	optim(*m);
 	float max;
 	max = find_max(*m);
-	cout<<endl<<"Ìàêñèìàëüíîå ðàññòîÿíèå = "<<max<<endl;
+	cout<<endl<<"ÃŒÃ ÃªÃ±Ã¨Ã¬Ã Ã«Ã¼Ã­Ã®Ã¥ Ã°Ã Ã±Ã±Ã²Ã®Ã¿Ã­Ã¨Ã¥ = "<<max<<endl;
 }
