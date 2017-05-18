@@ -142,6 +142,7 @@ int main()
 	cout<< "Ââåäèòå êîëè÷åñòâî ãîðîäîâ: ";
 	cin>>City_Num;
 	float m[City_Num][City_Num];
+	string name[City_Num];
 	input(*m , name);
 	cout<<endl;
 	bool trig = 1;
