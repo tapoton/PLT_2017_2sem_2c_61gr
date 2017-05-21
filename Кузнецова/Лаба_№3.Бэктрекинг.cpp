@@ -15,7 +15,7 @@ int Init_matr(int **a)
 		a[i][i] = 0;
 		for (int j = i + 1; j < SIZE; j++)
 		{
-			cout << "Enter the distanse " << (i + 1) << " - " << (j + 1) << ": ";
+			cout << "Введите расстояние между городами " << (i + 1) << " и " << (j + 1) << ": ";
 			cin >> dis;
 			sum += dis;
 			a[i][j] = dis;
@@ -49,7 +49,7 @@ void Init_dv(int *d, bool *v, int max, int k)
 
 
 
-void Deikstra(int max, bool *v, int *d, int **a, int k, int &s, int smin)
+void Algoritm(int max, bool *v, int *d, int **a, int k, int &s, int smin)
 {
 	int minind = SIZE + 1;
 	int min1 = max;
@@ -87,7 +87,7 @@ void Deikstra(int max, bool *v, int *d, int **a, int k, int &s, int smin)
 		if (s > smin)
 			return;
 		else
-			Deikstra(max, v, d, a, k, s, smin);
+			Algoritm(max, v, d, a, k, s, smin);
 	}
 	else
 		return;
@@ -119,7 +119,7 @@ int main()
 	{
 		Init_dv(d, v, max, ind);
 		int sum = 0;
-		Deikstra(max, v, d, a, ind, sum, smin);
+		Algoritm(max, v, d, a, ind, sum, smin);
 		if (sum < smin)
 		{
 			smin = sum;
@@ -127,7 +127,7 @@ int main()
 		}
 	}
 
-	cout << "City " << minind + 1 << " has the smalest sum distanse = " << smin << endl;
+	cout << "Город " << minind + 1 << " имеет минимальное суммарное расстояние равное " << smin << endl;
 
 	system("PAUSE");
 	return 0;
