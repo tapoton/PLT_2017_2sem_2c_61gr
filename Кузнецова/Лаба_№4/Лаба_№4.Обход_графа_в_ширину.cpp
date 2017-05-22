@@ -31,14 +31,14 @@ bool BFS(queue<int> Queue, int *nodes, int **a, int N, int k)
 
 		if (k == N - 1)
 		{
-			cout << "ÄÀ" << endl << endl;
+			cout << "Ð”Ð" << endl << endl;
 			return 1;
 		}
 	}
 
 	else
 	{
-		cout << "ÍÅÒ" << endl << endl;
+		cout << "ÐÐ•Ð¢" << endl << endl;
 		return 0;
 	}
 
@@ -47,7 +47,7 @@ bool BFS(queue<int> Queue, int *nodes, int **a, int N, int k)
 
 	else
 	{
-		cout << "ÍÅÒ" << endl << endl;
+		cout << "ÐÐ•Ð¢" << endl << endl;
 		return 0;
 	}
 }
@@ -74,8 +74,8 @@ int main()
 	Init_n(nodes, N);
 	Queue.push(0);
 
-	cout << "Êîëè÷åñòâî âåðøèí â ãðàôå = " << N << endl;
-	cout << endl << "Ìàòðèöà ñìåæíîñòè âåðøèí:" << endl;
+	cout << "ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð²ÐµÑ€ÑˆÐ¸Ð½ Ð² Ð³Ñ€Ð°Ñ„Ðµ = " << N << endl;
+	cout << endl << "ÐœÐ°Ñ‚Ñ€Ð¸Ñ†Ð° ÑÐ¼ÐµÐ¶Ð½Ð¾ÑÑ‚Ð¸ Ð²ÐµÑ€ÑˆÐ¸Ð½:" << endl;
 	for (int i = 0; i < N; i++)
 	{
 		for (int j = 0; j < N; j++)
@@ -83,17 +83,17 @@ int main()
 		cout << endl;
 	}
 
-	cout << endl << "ßâëÿåòñÿ ëè ãðàô äåðåâîì?  ";
+	cout << endl << "Ð¯Ð²Ð»ÑÐµÑ‚ÑÑ Ð»Ð¸ Ð³Ñ€Ð°Ñ„ Ð´ÐµÑ€ÐµÐ²Ð¾Ð¼?  ";
 	result = BFS(Queue, nodes, a, N, 0);
 
 	ofstream fout;
 	fout.open("output.txt");
 
 	if (result)
-		fout << "ÄÀ";
+		fout << "Ð”Ð";
 
 	else
-		fout << "ÍÅÒ";
+		fout << "ÐÐ•Ð¢";
 
 	fin.close();
 	fout.close();
