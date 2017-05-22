@@ -9,16 +9,16 @@ Sort the file in the order of nondecreasing scores.
 
 using namespace std;
 
-void Simple_Merging_Sort (char *name);
+void simpleMergingSort (char *name);
 
 int main()
 {
-	Simple_Merging_Sort("main_file.txt");
+	simpleMergingSort("main_file.txt");
 	
 	return 0;
 }
 
-void Simple_Merging_Sort (char *name)
+void simpleMergingSort (char *name)
 {
   int a1, a2, k, i, j, kol, tmp;
   char cha1,cha2;
@@ -26,7 +26,7 @@ void Simple_Merging_Sort (char *name)
   f.open("main_file.txt", ios::in);
   kol = 0;
   if ( !f.is_open() )
-    printf("\nCan`t read the file");
+    cout << "\nCan`t read the file";
   else {
     while ( !f.eof() ) {
       f >> cha1;
@@ -35,7 +35,7 @@ void Simple_Merging_Sort (char *name)
     }
     f.close();
   }
-  cout << kol;
+
   k = 1;
   while ( k < kol ){
     f.open(name, ios::in);
@@ -131,6 +131,6 @@ void Simple_Merging_Sort (char *name)
     f2.close();
     k *= 2;
   }
-  remove("smsort_1");
-  remove("smsort_2");
+  remove("smsort_1.txt");
+  remove("smsort_2.txt");
 }
