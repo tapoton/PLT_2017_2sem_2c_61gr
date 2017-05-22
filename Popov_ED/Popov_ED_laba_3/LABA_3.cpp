@@ -2,7 +2,7 @@
 
 using namespace std;
 
-class Roads {
+
 
 	bool** visited;
 
@@ -23,7 +23,7 @@ class Roads {
 	}
 
 
-public:
+
 
 	void init(int n, bool** a) { //инициализация посещенных дорог
 		visited = new bool *[n];
@@ -105,7 +105,7 @@ public:
 		output(n, a);
 
 		while (start < 1 || start > n) {
-			cout << "Enter the number of the initial city: ";
+			cout << "Enter the number of the start city: ";
 			cin >> start;
 			if (start < 1 || start > n) {
 				cout << "Wrong! Try again!" << endl;
@@ -137,11 +137,9 @@ public:
 		return (start_roads <= 3 || end_roads <= 3 || count_roads(a, n, start, end) <= 3);
 	}
 
-};
+
 
 int main() {
-
-	Roads obj;
 
 	int n = 0;
 	while (n < 3) {
@@ -158,11 +156,11 @@ int main() {
 	}
 
 	int start = 0, end = 0;
-	obj.input(n, a, start, end);
+	input(n, a, start, end);
 	
-	obj.init(n, a);
+	init(n, a);
 	
-	if (!obj.is_possible(n, a, start, end)) {
+	if (is_possible(n, a, start, end)) {
 		cout << "YES! If you close any 3 ways, you won't be able to get from city " << start << " to city " << end << endl;
 	}
 	else {
