@@ -140,7 +140,7 @@ int main()
 	}
 	fin.close();
 
-	cout << "Èñõîäíàÿ ìàòðèöà:" << endl;
+	cout << "Ð˜ÑÑ…Ð¾Ð´Ð½Ð°Ñ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†Ð°:" << endl;
 	for (int i = 0; i < m; i++)
 	{
 		for (int j = 0; j < n; j++)
@@ -174,7 +174,7 @@ int main()
 	f.close();
 	f2out.close();
 
-	cout << "Îòñîðòèðîâàííàÿ ìàòðèöà:" << endl;
+	cout << "ÐžÑ‚ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð°Ñ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†Ð°:" << endl;
 	for (int i = 0; i < m; i++)
 	{
 		for (int j = 0; j < n; j++)
