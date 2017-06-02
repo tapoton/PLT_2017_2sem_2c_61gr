@@ -10,7 +10,7 @@ int min = INT_MAX;
 
 struct Trie
 {
-	int value;        
+	int value;
 	char symbol;
 	Trie *sibling;
 	Trie *child;
@@ -28,17 +28,17 @@ Trie * CreateNode()
 
 Trie * Insert(Trie*root, char*key, int val)
 {
-	Trie *cur=new Trie, *parent, *list;
+	Trie *cur = new Trie, *parent, *list;
 	parent = NULL;
 	list = root;
 	for (int i = 0; key[i] != '\0'; i++)
 	{
-		for (cur = list; cur != NULL; cur = cur->sibling)     
+		for (cur = list; cur != NULL; cur = cur->sibling)
 		{
 			if (cur->symbol == key[i])
 				break;
 		}
-		if (cur == NULL)                        
+		if (cur == NULL)
 		{
 			cur = CreateNode();
 			cur->symbol = key[i];
@@ -49,7 +49,7 @@ Trie * Insert(Trie*root, char*key, int val)
 				root = cur;
 			list = NULL;
 		}
-		else                               
+		else
 		{
 			list = cur->child;
 		}
@@ -59,7 +59,7 @@ Trie * Insert(Trie*root, char*key, int val)
 	return root;
 }
 
-Trie * Fill()                          
+Trie * Fill()
 {
 	int n;
 	cout << "Enter the number of words.\n";
@@ -76,20 +76,16 @@ Trie * Fill()
 
 }
 
-void FindMinimum(Trie*root,  int length)                          
+void FindMinimum(Trie*root, int length)
 {
 	Trie *node;
 	int i;
 	for (node = root; node != NULL; node = node->sibling)
 	{
 		if (node->value != 1)
-			FindMinimum(node->child,  ++length);
+			FindMinimum(node->child, ++length);
 		else
 			if (min > length) min = length;
-			{
-				if (node->child != NULL)
-					FindMinimum(node->child, length);
-			}
 	}
 }
 
