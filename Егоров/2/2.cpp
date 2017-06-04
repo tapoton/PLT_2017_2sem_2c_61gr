@@ -32,78 +32,75 @@ unsigned int HashTable_Index(string name)
 	return (sum % HASHTABLE_SIZE);
 }
 
-void HashTable_Fill(string list, Node ** hashtable)
+void HashTable_Fill(string text, Node ** hashtable)
 {
-	string sname;
-	ifstream fin(list);
+	bool check=0;
+	string word;
+	ifstream fin(text);
 	while (!fin.eof())
 	{
-		fin >> sname;
+		fin >> word;
 		Node *cur = new Node;
-		int index = HashTable_Index(sname);
-		cur->name = sname;
-		cur->counter = 0;
-		cur->next = hashtable[index];
-		hashtable[index] = cur;
+		int index = HashTable_Index(word);
+		Node *current = new Node;
+		current = hashtable[index];
+		while(current&&!check)
+		{
+			if (current->name == word)
+			{
+				current->counter++;
+				check = 1;
+			}
+			current = current->next;
+		}
+		if (!check)
+		{
+			cur->name = word;
+			cur->counter = 1;
+			cur->next = hashtable[index];
+			hashtable[index] = cur;
+		}
 	}
-
 }
 
-void HashTable_WordCounter(char* text, Node **hashtable)
+void HashTable_WordCounter(string text, string list, Node **hashtable)
 {
-	for (int i = 0; i < HASHTABLE_SIZE; i++)
-		if (hashtable[i]) 
+	ifstream fin(list);
+	string listname;
+	bool check=0;
+	unsigned int index;
+	while (!fin.eof())
+	{
+		check = 0;
+		fin >> listname;
+		index = HashTable_Index(listname);
+		Node *current = new Node;
+		current = hashtable[index];
+		while (current&&!check)
 		{
-			int count=0, TextIndex = 0, WordIndex=0;
-			while (text[TextIndex]!='.')
+			if (current->name == listname)
 			{
-				while (hashtable[i]->name[WordIndex] == text[TextIndex]/**/ && hashtable[i]->name[WordIndex] /**/ && text[TextIndex]!='.')
-				{
-					count++;
-					WordIndex++;
-					TextIndex++;
-				}
-
-				if (count == hashtable[i]->name.length())
-					hashtable[i]->counter++;
-				count = 0;
-				WordIndex = 0;
-				TextIndex++;
+				cout << listname << " = " << current->counter<<endl;
+				check = 1;
 			}
+			current = current->next;
 		}
+	}
 }
-
-void HashTable_Print(Node **hashtable)
-{
-	cout << "The resulting hash function:" << endl;
-	int sum = 0;
-	for (int i = 0; i < HASHTABLE_SIZE; i++)
-		if (hashtable[i] != NULL)
-		{
-			Node *q;
-
-			while (hashtable[i] != NULL)
-			{
-				q = hashtable[i];
-				cout << q->name << " = " << q->counter << endl;
-				hashtable[i] = hashtable[i]->next;
-			}
-		}
-}
-
-
 
 int main()
 {
-	string list="list.txt";
+	string text;
+	string list;
 	cout << "Enter the text: " << endl;
-	char  text[1000];
-	gets_s(text);
-
+	cin>>text;
+	cout << "Enter the list: " << endl;
+	cin >> list;
+	
 	HashTable_Create();
-	HashTable_Fill(list, hashtable);
-	HashTable_WordCounter(text, hashtable);
-	HashTable_Print(hashtable);
+	HashTable_Fill(text, hashtable);
+	cout << "The result is: " << endl;
+	HashTable_WordCounter(text, list, hashtable);
 
 	system("PAUSE");
 	return EXIT_SUCCESS;
