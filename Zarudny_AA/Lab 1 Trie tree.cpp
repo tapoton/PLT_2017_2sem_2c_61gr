@@ -1,4 +1,4 @@
-// Зарудний Андрей, 61 группа 2 курса, лабораторная №5
+// LAB 1 TRIE TREE
 //
 #include "stdafx.h"
 #include <iostream>
