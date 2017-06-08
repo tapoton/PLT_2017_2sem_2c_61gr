@@ -68,18 +68,21 @@ void hashtableInit(Node **hashTable) {
 }
 
 int hashFunction(string key) {
-    int hash = key.length();
+    int hash = 0;
+
+    for (int i = 0; i < key.length(); i++)
+        hash = 31 * hash + (unsigned char)key[i];
 
     hash = hash % sizeOfHashtable;
     return hash;
 }
 
 bool hashtableAdd(Node **hashTable, string key) {
-    Node *node = new Node;
     int index = hashFunction(key);
     Node *searchNode = hashtableSearch(hashTable, key);
 
     if (searchNode == NULL) {
+        Node *node = new Node;
         node->key = key;
         node->next = hashTable[index];
         node->count = 1;
