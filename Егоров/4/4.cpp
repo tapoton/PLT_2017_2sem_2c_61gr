@@ -19,12 +19,14 @@ int MaximumFlow(int **Matrix, int number, int last, int start, int end, int mini
 	if (start == 0)
 	{
 		i = 0;
-		while (i<6)
+		while (i<number)
 		{
 			while (Matrix[start][i])
 			{
-				minimum = MaximumFlow(Matrix, number, start, i, end, minimum);
+				int index = i;
+				minimum = MaximumFlow(Matrix, number, start, i, end, INT_MAX);
 				maximum += minimum;
+				i = index;
 			}
 			i++;
 		}
@@ -44,9 +46,8 @@ int MaximumFlow(int **Matrix, int number, int last, int start, int end, int mini
 		}
 
 		minimum = MaximumFlow(Matrix, number, start, i, end, minimum);
-		if (start!=0)Matrix[last][start] -= minimum;
 	}
-	i--;
+	Matrix[last][start] -= minimum;
 	return minimum;
 }
 
